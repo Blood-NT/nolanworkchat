@@ -15,7 +15,7 @@ const createTaskMessagesService = async (
   };
 };
 
-const getTaskMessagesInGroupService = async (
+const getTaskMessagesService = async (
   taskid: number
 ): Promise<response> => {
   const allMessaes: taskmessages[] = await taskmessagesModel.findAll({
@@ -30,7 +30,21 @@ const getTaskMessagesInGroupService = async (
   };
 };
 
+const deleteTaskMessagesService = async (
+  messagesId: string
+): Promise<response> => {
+  await taskmessagesModel.destroy({
+    where: {
+      id: messagesId,
+    },
+  });
+  return {
+    statusCode: "200",
+    message: "xóa tin nhắn thành công",
+  };
+};
 export {
   createTaskMessagesService,
-  getTaskMessagesInGroupService,
+  getTaskMessagesService,
+  deleteTaskMessagesService
 };

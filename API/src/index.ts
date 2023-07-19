@@ -76,9 +76,10 @@ io.on("connection", (socket) => {
     console.log("a user disconnect ", socket.id);
     removeUser(socket.id);
     io.emit("getUsers", users);
+    logging.debug("","hmmm",users)
   });
 });
 
 httpServer.listen(port, () => {
-  logging.info(NAME_SPACE, `Server is 111running http://localhost:${port}`);
+  logging.info(NAME_SPACE, `Server is running http://localhost:${port}`);
 });

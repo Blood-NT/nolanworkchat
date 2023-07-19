@@ -8,8 +8,8 @@ export interface task
   leaderid: string;
   memid: string;
   tasknote: string;
-  isdone: number;
-  ischeck: number;
+  isdone: boolean;
+  ischeck: Boolean;
   createat?: Date;
   start?: Date;
   end?: Date;

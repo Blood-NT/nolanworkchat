@@ -1,10 +1,10 @@
 import { Op } from "sequelize";
-import { groupModel } from "../models/group.model";
-import { group } from "../interfaces/group.interface";
+import { taskModel } from "../models/task.model";
+import { task } from "../interfaces/task.interface";
 import response from "../interfaces/response.interface";
 
-const createTaskService = async (newGroup: group): Promise<response> => {
-  const group: group = await groupModel.create(newGroup);
+const createTaskService = async (newGroup: task): Promise<response> => {
+  const group: task = await taskModel.create(newGroup);
   return {
     statusCode: "200",
     message: "tạo kết nối thành công",
@@ -12,11 +12,41 @@ const createTaskService = async (newGroup: group): Promise<response> => {
   };
 };
 
-const getTaskWithDeadlineService = async (userId: string): Promise<response> => {
-  const foundGroup: group[] = await groupModel.findAll({
+const getTaskByDeadlineService = async (userId: string): Promise<response> => {
+  const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ sender: userId }, { receive: userId }],
-      isDelete: false,// thay bằng done
+      [Op.or]: [{ leaderid: userId }, { memid: userId }],
+      isdone: false,// thay bằng done
+    },
+    order: [["end", "DESC"]],
+  });
+  return {
+    statusCode: "200",
+    message: "",
+    data: foundGroup,
+  };
+};
+const getTaskByJobService = async (userId: string): Promise<response> => {
+  const foundGroup: task[] = await taskModel.findAll({
+    where: {
+      [Op.or]: [{ leaderid: userId }, { memid: userId }],
+      isdone: false,// thay bằng done
+    },
+    order: [["jobid", "DESC"]],
+  });
+  return {
+    statusCode: "200",
+    message: "",
+    data: foundGroup,
+  };
+};
+
+
+const getTaskByTimeService = async (userId: string): Promise<response> => {
+  const foundGroup: task[] = await taskModel.findAll({
+    where: {
+      [Op.or]: [{ leaderid: userId }, { memid: userId }],
+      isdone: false,
     },
     order: [["updateAt", "DESC"]],
   });
@@ -27,11 +57,12 @@ const getTaskWithDeadlineService = async (userId: string): Promise<response> => 
   };
 };
 
-const getTaskWithTimeService = async (userId: string): Promise<response> => {
-  const foundGroup: group[] = await groupModel.findAll({
+
+const getTaskService = async (userId: string): Promise<response> => {
+  const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ sender: userId }, { receive: userId }],
-      isDelete: false,
+      [Op.or]: [{ leaderid: userId }, { memid: userId }],
+      isdone: false,
     },
     order: [["updateAt", "DESC"]],
   });
@@ -42,28 +73,6 @@ const getTaskWithTimeService = async (userId: string): Promise<response> => {
   };
 };
 
-const getTaskService = async (
-  sender: string,
-  receive: string
-): Promise<response> => {
-  if (sender > receive) {
-    let coppy: string = sender;
-    sender = receive;
-    receive = coppy;
-  }
-  const foundGroup: group | null = await groupModel.findOne({
-    where: {
-      sender: sender,
-      receive: receive,
-      isDelete: false,
-    },
-  });
-  return {
-    statusCode: "200",
-    message: "lấy dữ liệu thành công",
-    data: foundGroup,
-  };
-};
 
 const updateIsDeleteTaskService = async (
   sender: string,
@@ -74,13 +83,13 @@ const updateIsDeleteTaskService = async (
     sender = receive;
     receive = coppy;
   }
-  await groupModel.update(
+  await taskModel.update(
     {
-      isDelete: true,
-      updateAt: new Date(),
+      isdone: true,
+      updatedAt: new Date(),
     },
     {
-      where: { sender: sender, receive: receive },
+      where: { leaderid: sender, memid: receive },
     }
   );
   return {
@@ -90,9 +99,9 @@ const updateIsDeleteTaskService = async (
 };
 
 const updateTimeTaskService = async (id: number): Promise<response> => {
-  await groupModel.update(
+  await taskModel.update(
     {
-      updateAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       where: { id: id },
@@ -106,9 +115,10 @@ const updateTimeTaskService = async (id: number): Promise<response> => {
 
 export {
   createTaskService,
-  getTaskWithDeadlineService,
-  getTaskWithTimeService,
+  getTaskByDeadlineService,
+  getTaskByTimeService,
   getTaskService,
+  getTaskByJobService,
   updateIsDeleteTaskService,
-  updateTimeTaskService
+  updateTimeTaskService,
 };

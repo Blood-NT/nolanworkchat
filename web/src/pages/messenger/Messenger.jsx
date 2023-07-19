@@ -36,14 +36,35 @@ const Messenger = () => {
 
   const inputFile = useRef(null);
 
+  const openChatIfNull = async (users) => {
+
+    const found = await getGroup(user.id, users.senderId);
+    setCurrentChat(found.data)
+    console.log("ok", found.data)
+
+
+    handleCurrentChat(found.data)
+    console.log("ok2", currentChat)
+
+
+  };
+
   useEffect(() => {
     socket.on("getMessage", (data) => {
+
+
+
       setArrivalMessage({
         sender: data.senderId,
         messages: data.text,
         type: data.type,
         createAt: Date.now(),
       });
+      if (currentChat == null) {
+
+        openChatIfNull(data)
+      }
+      console.log('chatne', data)
     });
     socket.on("getDeleteMessage", () => {
       setLoadData((loadData) => ++loadData);
@@ -186,8 +207,8 @@ const Messenger = () => {
     };
     fetchUser();
     setCurrentChat(c);
+    console.log("chekk", currentChat)
   };
-
   return (
     <>
       {user && (
@@ -213,6 +234,7 @@ const Messenger = () => {
                 {conversations.map((c, index) => (
                   <div
                     onClick={() => {
+
                       handleCurrentChat(c);
                     }}
                     key={index}
