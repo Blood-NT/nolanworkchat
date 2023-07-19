@@ -74,18 +74,32 @@ const getTaskService = async (userId: string): Promise<response> => {
 };
 
 
-const updateIsDeleteTaskService = async (
+const updateIsDoneTaskService = async (
   sender: string,
   receive: string
 ): Promise<response> => {
-  if (sender > receive) {
-    let coppy: string = sender;
-    sender = receive;
-    receive = coppy;
-  }
   await taskModel.update(
     {
       isdone: true,
+      updatedAt: new Date(),
+    },
+    {
+      where: { leaderid: sender, memid: receive },
+    }
+  );
+  return {
+    statusCode: "200",
+    message: "cập nhật thành công",
+  };
+};
+
+const notDoneTask = async (
+  sender: string,
+  receive: string
+): Promise<response> => {
+  await taskModel.update(
+    {
+      isdone: false,
       updatedAt: new Date(),
     },
     {
@@ -119,6 +133,7 @@ export {
   getTaskByTimeService,
   getTaskService,
   getTaskByJobService,
-  updateIsDeleteTaskService,
+  updateIsDoneTaskService,
   updateTimeTaskService,
+  notDoneTask
 };

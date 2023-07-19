@@ -15,7 +15,7 @@ const createJobService = async (newJob:job): Promise<response> => {
   };
 };
 
-const getJobService = async (userId: string): Promise<response> => {
+const getJobByTimeService = async (userId: string): Promise<response> => {
   const foundGroup:job[] = await jobModel.findAll({
     where: {
       [Op.or]: [{ adminid: userId }, { leaderid: userId }],
@@ -77,5 +77,5 @@ const getJobByUserService = async (
 export {
   createJobService,
   getJobByUserService,
-  getJobService,
+  getJobByTimeService,
 };

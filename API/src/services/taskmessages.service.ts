@@ -1,13 +1,13 @@
 import { taskmessagesModel } from "../models/taskmessages.model";
 import { taskmessages } from "../interfaces/taskmessages.interface";
 import response from "../interfaces/response.interface";
-import { updateTimeGroupService } from "./group.service";
+import { updateTimeTaskService } from "./task.service";
 const createTaskMessagesService = async (
   newMessages: taskmessages
 ): Promise<response> => {
   newMessages.createAt = new Date();
   const taskMessages: taskmessages = await taskmessagesModel.create(newMessages);
-  await updateTimeGroupService(newMessages.taskid);
+  await updateTimeTaskService(newMessages.taskid);
   return {
     statusCode: "200",
     message: "tạo tin nhắn task thành công",
