@@ -20,6 +20,41 @@ import "./home.css";
 
 import { useNavigate } from "react-router-dom";
 
+
+import PropTypes from 'prop-types';
+
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
+function TabPanel(props) {
+  const { children, tvalue, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={tvalue !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {tvalue === index && (
+        <Box sx={{ p: 1 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  tvalue: PropTypes.number.isRequired,
+};
+
+
 const Home = () => {
     const [textSearch, setTextSearch] = useState("");
     const { setNotifi } = useContext(NotifiContext);
@@ -31,6 +66,12 @@ const Home = () => {
     const [dataUser, setDataUser] = useState([]);
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
+
+    const [tvalue, settValue] = React.useState(0);
+
+    const handleChangeTab = (event, newValue) => {
+      settValue(newValue);
+    };
 
     const fetchData = async () => {
         const res = await getAllUser();
@@ -65,9 +106,6 @@ const Home = () => {
         // setNotifi([res.message]);
     };
 
-    const handleSearch = async () => {
-
-    };
 
     return (
         <>
@@ -75,26 +113,48 @@ const Home = () => {
 <div className="homee">
 
             <div className="left_home">
-
-                <div style={{ marginLeft: "20%" }}>
-                    <TextField
-                        id="outlined-basic"
-                        label="Tìm kiếm"
-                        variant="outlined"
-                        size="small"
-                        value={textSearch}
-                        onChange={(e) => {
-                            setTextSearch(e.target.value);
-                        }}
-                    />
-                    <Button
-                        variant="outlined"
-                        style={{ marginLeft: "10px", marginTop: "2px" }}
-                        onClick={handleSearch}
-                    >
-                        Tìm kiếm
-                    </Button>
-                </div>
+            <Box
+      sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
+    >
+      <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={tvalue}
+        onChange={handleChangeTab}
+        aria-label="Vertical tabs example"
+        sx={{ borderRight: 1, borderColor: 'divider' }}
+      >
+        <Tab label="Item One" />
+        <Tab label="Item Two"  />
+        <Tab label="Item Three" />
+        <Tab label="Item Four"  />
+        <Tab label="Item Five"/>
+        <Tab label="Item Six"  />
+        <Tab label="Item Seven" />
+      </Tabs>
+      <TabPanel tvalue={tvalue} index={0}>
+        Item One
+      </TabPanel>
+      <TabPanel tvalue={tvalue} index={1}>
+        Item Two
+      </TabPanel>
+      <TabPanel tvalue={tvalue} index={2}>
+        Item Three
+      </TabPanel>
+      <TabPanel tvalue={tvalue} index={3}>
+        Item Four
+      </TabPanel>
+      <TabPanel tvalue={tvalue} index={4}>
+        Item Five
+      </TabPanel>
+      <TabPanel tvalue={tvalue} index={5}>
+        Item Six
+      </TabPanel>
+      <TabPanel tvalue={tvalue} index={6}>
+        Item Seven
+      </TabPanel>
+    </Box>
+          
             </div>
             <div className="right_home">
                 <form

@@ -108,14 +108,12 @@ const Home = () => {
                             }}
                             sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
                         />
-
-
-
                         <div>
                             <div>{`value: ${value ? `'${value.id}` : 'null'}`}</div>
                             <div>{`inputValue: '${inputValue}'`}</div>
                             <br />
                             <Autocomplete
+                            
                                 value={value}
                                 onChange={(event, newValue) => {
                                     setValue(newValue);
@@ -143,9 +141,9 @@ const Home = () => {
                             <DateRangePicker
                                 value={dateRange}
                                 onChange={handleDateChange2}
-                                localeText={{ start: 'start', end: 'end' }}
-                                mask="__-__-____"
-                                inputFormat="DD-MM-YYYY"
+                                localeText={{ start: 'start', end:'end' }}
+                                // inputFormat="DD/MM/YYYY" 
+                                format="DD-MM-YYYY"
                                 sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" , marginTop:"20px"}}
 
                             />

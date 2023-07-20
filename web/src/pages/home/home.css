@@ -1,4 +1,7 @@
 .homee{
-    justify-content: center;
+    justify-content: space-between;
     display: flex;
+}
+.left_home,.right_home{
+    width: 50vh;
 }

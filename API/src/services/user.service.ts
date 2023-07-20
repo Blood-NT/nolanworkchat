@@ -71,7 +71,7 @@ const getUserService = async (id: string, email: string) => {
 const getAllUserService = async () => {
   let foundUser: any[] = await userModel.findAll({
     where: {
-      role: "user",
+      // role: "user",
       verify: true,
     },
     attributes: ["id", "firstName", "lastName", "email", "avatar", "lock"],
