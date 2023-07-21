@@ -7,7 +7,7 @@ import {
   deleteTaskMessagesService
 } from "../services/taskmessages.service";
 
-const createMessaes = async (req: Request, res: Response) => {
+const createtaskMessaes = async (req: Request, res: Response) => {
   try {
     const newMessages: taskmessages = req.body;
     const response: response = await createTaskMessagesService(newMessages);
@@ -17,7 +17,7 @@ const createMessaes = async (req: Request, res: Response) => {
   }
 };
 
-const getMessagesInGroup = async (req: Request, res: Response) => {
+const getTaskMessagesInTask = async (req: Request, res: Response) => {
   try {
     const groupId: number = Number(req.params.groupId);
     const response: response = await getTaskMessagesService(groupId);
@@ -27,7 +27,7 @@ const getMessagesInGroup = async (req: Request, res: Response) => {
   }
 };
 
-const deleteMessagesInGroup = async (req: Request, res: Response) => {
+const deleteMessagesInTask = async (req: Request, res: Response) => {
   try {
     const messagesId: string = req.body.messagesId;
     const response: response = await deleteTaskMessagesService(messagesId);
@@ -38,7 +38,7 @@ const deleteMessagesInGroup = async (req: Request, res: Response) => {
 };
 
 export default {
-  createMessaes,
-  getMessagesInGroup,
-  deleteMessagesInGroup,
+  createtaskMessaes,
+  getTaskMessagesInTask,
+  deleteMessagesInTask,
 };

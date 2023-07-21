@@ -4,6 +4,13 @@ import { task } from "../interfaces/task.interface";
 import response from "../interfaces/response.interface";
 
 const createTaskService = async (newGroup: task): Promise<response> => {
+
+  newGroup.createat = new Date();
+  newGroup.start = new Date();
+  newGroup.end = new Date();
+  newGroup.updatedAt = new Date();
+  newGroup.isdone= false;
+  newGroup.ischeck=false;
   const group: task = await taskModel.create(newGroup);
   return {
     statusCode: "200",
@@ -12,6 +19,7 @@ const createTaskService = async (newGroup: task): Promise<response> => {
   };
 };
 
+//tassk theo ngayf
 const getTaskByDeadlineService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
@@ -26,6 +34,8 @@ const getTaskByDeadlineService = async (userId: string): Promise<response> => {
     data: foundGroup,
   };
 };
+
+// tassk theo job
 const getTaskByJobService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
@@ -41,14 +51,14 @@ const getTaskByJobService = async (userId: string): Promise<response> => {
   };
 };
 
-
+//tassk mowis nhaats
 const getTaskByTimeService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
       [Op.or]: [{ leaderid: userId }, { memid: userId }],
       isdone: false,
     },
-    order: [["updateAt", "DESC"]],
+    order: [["updatedAt", "DESC"]],
   });
   return {
     statusCode: "200",
@@ -57,14 +67,14 @@ const getTaskByTimeService = async (userId: string): Promise<response> => {
   };
 };
 
-
+//tassk mowis caapj nhaatj
 const getTaskService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
       [Op.or]: [{ leaderid: userId }, { memid: userId }],
       isdone: false,
     },
-    order: [["updateAt", "DESC"]],
+    order: [["updatedAt", "DESC"]],
   });
   return {
     statusCode: "200",
@@ -72,6 +82,43 @@ const getTaskService = async (userId: string): Promise<response> => {
     data: foundGroup,
   };
 };
+//
+const  getAllTaskByLeaderService= async (userId: string): Promise<response> => {
+  const foundGroup: task[] = await taskModel.findAll({
+    where: {
+      [Op.or]: [{ leaderid: userId }, { memid: userId }],
+      isdone: false,
+    },
+    order: [["leaderid", "DESC"]],
+  });
+  return {
+    statusCode: "200",
+    message: "",
+    data: foundGroup,
+  };
+};
+
+//laays tassk theo 1  leader
+const getTaskByLeaderService = async (
+  leaderid: string,
+  memid: string
+): Promise<response> => {
+
+  const foundGroup:task[] | null = await taskModel.findAll({
+    where: {
+      leaderid: leaderid,
+      memid: memid,
+      // isDelete: false,
+    },
+  });
+  return {
+    statusCode: "200",
+    message: "lấy dữ liệu thành công",
+    data: foundGroup,
+  };
+};
+
+
 
 
 const updateIsDoneTaskService = async (
@@ -133,6 +180,8 @@ export {
   getTaskByTimeService,
   getTaskService,
   getTaskByJobService,
+  getTaskByLeaderService,
+  getAllTaskByLeaderService,
   updateIsDoneTaskService,
   updateTimeTaskService,
   notDoneTask
