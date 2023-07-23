@@ -1,6 +1,24 @@
 import axios from "axios";
 import { apiURL } from "../config/config";
 
+//jobb
+const createJobRes = async (jobName, jobNote, leader, admin) => {
+  try {
+    const body = {
+      jobname: jobName,
+      leaderid: leader,
+      adminid: admin,
+      jobnote: jobNote
+
+    };
+    const res = await axios.post(`${apiURL}/job/create-job`, body);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
+
 const login = async (email, password) => {
   try {
     const body = {
@@ -13,6 +31,8 @@ const login = async (email, password) => {
     console.log(`${error}`);
   }
 };
+
+
 
 const loginByToken = async () => {
   try {
@@ -31,7 +51,7 @@ const registerUser = async (user) => {
   try {
     const res = await axios.post(`${apiURL}/user/create-user`, user);
     return res.data;
-  } catch (err) {}
+  } catch (err) { }
 };
 
 const forgotPassword = async (email, password) => {
@@ -42,7 +62,7 @@ const forgotPassword = async (email, password) => {
     };
     const res = await axios.post(`${apiURL}/user/forgot-password`, body);
     return res.data;
-  } catch (err) {}
+  } catch (err) { }
 };
 
 const getUserByUsername = async (username) => {
@@ -126,4 +146,5 @@ export {
   forgotPassword,
   getAllUser,
   lockUser,
+  createJobRes
 };

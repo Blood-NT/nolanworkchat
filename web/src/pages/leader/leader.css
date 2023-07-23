@@ -1,4 +1,33 @@
 .homee{
-    justify-content: center;
+    justify-content: space-between;
     display: flex;
+    padding: 0px 50px 0px 50px;
+    height: 80vh;
 }
+.left_home,.right_home{
+    width: 50vw;
+}
+.right_home{
+    display: flex;
+    justify-content: center;
+}
+.tabPick:hover{
+    border: 1px solid #1987DE;
+    border-radius: 15pc;
+}
+/* 
+.MuiTabs-root .Mui-selected {
+    color: #ff0000;
+    background-color: #1987DE;  }
+   */
+/* Chữ mặc định của tab */
+/* .tabPick {
+    color: #000000; 
+  }
+  
+  .tabPick.Mui-selected {
+    color: #ff0000; 
+  }
+   */
+
+   /* Hiệu ứng chuyển tiếp khi tab được chọn */

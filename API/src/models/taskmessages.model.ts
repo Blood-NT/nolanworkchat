@@ -6,7 +6,7 @@ export const taskmessagesModel = sequelize.define<taskmessages>(
   "taskmessages",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    taskid: DataTypes.INTEGER,
+    taskid: DataTypes.STRING(500),
     messages: DataTypes.STRING(500),
     createAt:DataTypes.DATE,
     sender: DataTypes.STRING(20),

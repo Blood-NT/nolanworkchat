@@ -12,5 +12,22 @@
     justify-content: center;
 }
 .tabPick:hover{
-    border: 2px solid #1987DE;
+    border: 1px solid #1987DE;
+    border-radius: 15pc;
 }
+/* 
+.MuiTabs-root .Mui-selected {
+    color: #ff0000;
+    background-color: #1987DE;  }
+   */
+/* Chữ mặc định của tab */
+/* .tabPick {
+    color: #000000; 
+  }
+  
+  .tabPick.Mui-selected {
+    color: #ff0000; 
+  }
+   */
+
+   /* Hiệu ứng chuyển tiếp khi tab được chọn */

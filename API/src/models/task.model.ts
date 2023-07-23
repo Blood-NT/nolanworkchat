@@ -5,9 +5,9 @@ import sequelize from "../config/connectDB";
 export const taskModel = sequelize.define<task>(
   "task",
   {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id: { type: DataTypes.STRING(500), primaryKey: true },
     taskname: DataTypes.STRING(500),
-    jobid: DataTypes.INTEGER,
+    jobid: DataTypes.STRING(500),
     leaderid: DataTypes.STRING(20),
     memid: DataTypes.STRING(20),
     tasknote: DataTypes.STRING(500),

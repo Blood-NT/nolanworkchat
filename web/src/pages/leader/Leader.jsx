@@ -17,6 +17,7 @@ import { UserContext } from "../../context/userContext";
 import { getAllUser, lockUser } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
 import "./leader.css";
+
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,6 +25,42 @@ import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePi
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 
 import { useNavigate } from "react-router-dom";
+
+import PropTypes from 'prop-types';
+
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
+
+function TabPanel(props) {
+    const { children, tvalue, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={tvalue !== index}
+        id={`vertical-tabpanel-${index}`}
+        aria-labelledby={`vertical-tab-${index}`}
+        {...other}
+      >
+        {tvalue === index && (
+          <Box sx={{ p: 1 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    tvalue: PropTypes.number.isRequired,
+  };
+
+  
 
 const Home = () => {
     const [textSearch, setTextSearch] = useState("");
@@ -38,6 +75,15 @@ const Home = () => {
     const [inputValue, setInputValue] = useState("");
     const [dateRange, setDateRange] = useState([null, null]);
 
+
+    const [tvalue, settValue] = React.useState(0);
+
+    const handleChangeTab = (event, newValue) => {
+      settValue(newValue);
+    };
+
+    
+    
     const fetchData = async () => {
         const res = await getAllUser();
         if (res.statusCode === "200") {
@@ -87,9 +133,60 @@ const Home = () => {
             <Topbar setConversations={null} />
             <div className="homee">
 
-                <div className="left_home">
-                </div>
-                <div className="right_home">
+            <div className="left_home"
+          style={{ border: '3px solid #F5F5F5' }}>
+          <Box
+            sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%', }}
+          >
+            <Tabs
+              orientation="vertical"
+              variant="scrollable"
+              value={tvalue}
+              onChange={handleChangeTab}
+              aria-label="Vertical tabs example"
+
+              // sx={{ borderRight: 1, borderColor: 'divider', width: "30%"}}
+           
+              sx={{ 
+                borderRight: 1, 
+                borderColor: 'divider', 
+                width: "30%",
+                "& .tabPick": {
+                  fontSize: 16, // Thay đổi cỡ chữ tại đây
+                  // color: 'blue', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                  '&.Mui-selected': {
+                    borderRadius: '15px',
+                    background: '#1987DE',
+                  color: 'white', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                     // Thay đổi mã màu (#00ff00) thành màu nền bạn muốn khi tab được chọn
+                  },
+                },
+              }}
+           >
+              <Tab className="tabPick" label="PROJECT" />
+              <Tab className="tabPick" label="LỊCH" />
+              <Tab className="tabPick" label="TASK" />
+              <Tab className="tabPick" label="DEADLINE" />
+              <Tab className="tabPick" label="TASKEND" />
+
+
+            </Tabs>
+            <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
+
+            <TabPanel tvalue={tvalue} index={0}>
+              
+            </TabPanel>
+            <TabPanel tvalue={tvalue} index={1}>
+              Item Two
+            </TabPanel>
+            <TabPanel tvalue={tvalue} index={2}>
+              Item Three
+            </TabPanel>
+
+          </Box>
+
+        </div>
+                <div className="right_home" style={{ border: '3px solid #F5F5F5' }}>
                     <form
                         className="loginBox"
                         onSubmit={handleLogin}
@@ -100,7 +197,32 @@ const Home = () => {
                             required
                             type="text"
                             id="outlined-basic"
-                            label="Tên job"
+                            label="jobid"
+                            variant="outlined"
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                            }}
+                            sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
+                        />
+                        <TextField
+                            required
+                            type="text"
+                            id="outlined-basic"
+                            label="tasskName"
+                            variant="outlined"
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                            }}
+                            sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
+                        />
+
+                        <TextField
+                            required
+                            type="text"
+                            id="outlined-basic"
+                            label="taskId"
                             variant="outlined"
                             value={email}
                             onChange={(e) => {
@@ -113,7 +235,7 @@ const Home = () => {
                             <div>{`inputValue: '${inputValue}'`}</div>
                             <br />
                             <Autocomplete
-                            
+
                                 value={value}
                                 onChange={(event, newValue) => {
                                     setValue(newValue);
@@ -141,10 +263,10 @@ const Home = () => {
                             <DateRangePicker
                                 value={dateRange}
                                 onChange={handleDateChange2}
-                                localeText={{ start: 'start', end:'end' }}
+                                localeText={{ start: 'start', end: 'end' }}
                                 // inputFormat="DD/MM/YYYY" 
                                 format="DD-MM-YYYY"
-                                sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" , marginTop:"20px"}}
+                                sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: "20px" }}
 
                             />
                         </LocalizationProvider>
@@ -175,7 +297,7 @@ const Home = () => {
                             type="submit"
                             style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
                         >
-                            Tạo job
+                            Tạo task
                         </button>
 
                     </form>

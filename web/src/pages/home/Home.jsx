@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState, useContext } from "react";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
-import { getAllUser, lockUser } from "../../api/apiUser";
+import { getAllUser, lockUser, createJobRes } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
 import "./home.css";
 
@@ -60,8 +60,9 @@ const Home = () => {
   const { setNotifi } = useContext(NotifiContext);
   const { user } = useContext(UserContext);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [jobname, setJobName] = useState("");
+  const [jobId, setJobId] = useState("");
+  const [jobnote, setJobnote] = useState("");
   const navigate = useNavigate();
   const [dataUser, setDataUser] = useState([]);
   const [value, setValue] = useState("");
@@ -91,19 +92,12 @@ const Home = () => {
   }));
 
 
-  const handleLogin = async (e) => {
-    // e.preventDefault();
-    // let res = await login(email, password);
-    // console.log("new user ", res);
-    // if (res.statusCode === "200") {
-    //   localStorage.setItem("accessToken", res.data.accessToken);
-    //   localStorage.setItem("refreshToken", res.data.refreshToken);
-    //   setUser(res.data);
-    //   navigate("/messenger");
-    //   setNotifi(["Đăng nhập thành công", "success"]);
-    //   return;
-    // }
-    // setNotifi([res.message]);
+  const handleCreateJob = async (e) => {
+    e.preventDefault();
+    let res = await createJobRes(jobname,jobnote,value.id,user.id);
+    console.log("new user ", res);
+    
+    setNotifi([res.message]);
   };
 
 
@@ -113,7 +107,7 @@ const Home = () => {
       <div className="homee">
 
         <div className="left_home"
-          style={{ border: '3px solid rgba(0,255,0,0.3)' }}>
+          style={{ border: '3px solid #F5F5F5' }}>
           <Box
             sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%', }}
           >
@@ -123,8 +117,26 @@ const Home = () => {
               value={tvalue}
               onChange={handleChangeTab}
               aria-label="Vertical tabs example"
-              sx={{ borderRight: 1, borderColor: 'divider', width: "30%" }}
-            >
+
+              // sx={{ borderRight: 1, borderColor: 'divider', width: "30%"}}
+           
+              sx={{ 
+                borderRight: 1, 
+                borderColor: 'divider', 
+                width: "30%",
+                position: 'relative', 
+                "& .tabPick": {
+                  fontSize: 16, // Thay đổi cỡ chữ tại đây
+                  // color: 'blue', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                  '&.Mui-selected': {
+                    borderRadius: '15px',
+                    background: '#1987DE',
+                  color: 'white', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                     // Thay đổi mã màu (#00ff00) thành màu nền bạn muốn khi tab được chọn
+                  },
+                },
+              }}
+           >
               <Tab className="tabPick" label="PROJECT" />
               <Tab className="tabPick" label="LỊCH" />
               <Tab className="tabPick" label="TASK" />
@@ -133,6 +145,8 @@ const Home = () => {
 
 
             </Tabs>
+            <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
+
             <TabPanel tvalue={tvalue} index={0}>
               
             </TabPanel>
@@ -147,10 +161,10 @@ const Home = () => {
 
         </div>
         <div className="right_home"
-          style={{ border: '3px solid rgba(0,255,0,0.3)' }}>
+          style={{ border: '3px solid #F5F5F5' }}>
           <form
             className="loginBox"
-            onSubmit={handleLogin}
+            onSubmit={handleCreateJob}
             style={{ height: "400px", width: "500px", }}
           >
             <h1 style={{ textAlign: "center" }}> tạo Job </h1>
@@ -158,26 +172,37 @@ const Home = () => {
               required
               type="text"
               id="outlined-basic"
+              label="job id"
+              variant="outlined"
+              value={jobId}
+              onChange={(e) => {
+                setJobName(e.target.value);
+              }}
+              sx={{ width: "80%", marginLeft: "auto", marginRight: "auto",marginTop:'20px' }}
+            />
+            <TextField
+              required
+              type="text"
+              id="outlined-basic"
               label="Tên job"
               variant="outlined"
-              value={email}
+              value={jobname}
               onChange={(e) => {
-                setEmail(e.target.value);
+                setJobName(e.target.value);
               }}
-              sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
+              sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" ,marginTop:'20px'}}
             />
 
 
 
             <div>
-              <div>{`value: ${value ? `'${value.id}` : 'null'}`}</div>
+              {/* <div>{`value: ${value ? `'${value.id}` : 'null'}`}</div>
               <div>{`inputValue: '${inputValue}'`}</div>
-              <br />
+              <br /> */}
               <Autocomplete
                 value={value}
                 onChange={(event, newValue) => {
                   setValue(newValue);
-                  console.log(value.id)
                 }}
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
@@ -193,7 +218,7 @@ const Home = () => {
                   </li>
                 )}
                 renderInput={(params) => (
-                  <TextField {...params} required label="Controllable" />
+                  <TextField {...params} required label="leader" sx={{marginTop:'20px'}} />
                 )}
               />
             </div>
@@ -207,9 +232,9 @@ const Home = () => {
               multiline
               rows={5} // Số dòng mặc định
               maxRows={10} // Giới hạn số dòng tối đa
-              value={password}
+              value={jobnote}
               onChange={(e) => {
-                setPassword(e.target.value);
+                setJobnote(e.target.value);
               }}
 
               sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: "20px" }}
@@ -219,7 +244,7 @@ const Home = () => {
             <button
               className="loginButton"
               type="submit"
-              style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
+              style={{ width: "80%", marginLeft: "auto", marginRight: "auto" ,marginTop:'20px'}}
             >
               Tạo job
             </button>

@@ -74,9 +74,10 @@ io.on("connection", (socket) => {
         console.log("a user disconnect ", socket.id);
         removeUser(socket.id);
         io.emit("getUsers", exports.users);
+        logging_1.default.debug("", "hmmm", exports.users);
     });
 });
 httpServer.listen(port, () => {
-    logging_1.default.info(NAME_SPACE, `Server is 111running http://localhost:${port}`);
+    logging_1.default.info(NAME_SPACE, `Server is rrrrunning http://localhost:${port}`);
 });
 //# sourceMappingURL=index.js.map

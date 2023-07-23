@@ -71,7 +71,6 @@ exports.getUserService = getUserService;
 const getAllUserService = async () => {
     let foundUser = await user_model_1.userModel.findAll({
         where: {
-            // role: "user",
             verify: true,
         },
         attributes: ["id", "firstName", "lastName", "email", "avatar", "lock"],
@@ -91,32 +90,6 @@ const getAllUserService = async () => {
     };
 };
 exports.getAllUserService = getAllUserService;
-
-const getAllUserOfRole = async (rolee) => {
-    let foundUser = await user_model_1.userModel.findAll({
-        where: {
-            role: rolee,
-            verify: true,
-        },
-        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock"],
-        order: [["id", "ASC"]],
-    });
-    await (0, modern_async_1.map)(foundUser, (data, index) => {
-        const found = index_1.users.find((u) => u.id === data.id);
-        foundUser[index].dataValues.status = false;
-        if (found) {
-            foundUser[index].dataValues.status = true;
-        }
-    });
-    return {
-        statusCode: "200",
-        message: "lấy người dùng thành công",
-        data: foundUser,
-    };
-};
-exports.getAllUserOfRole = getAllUserOfRole;
-
-
 const getToken = (id, role, type) => {
     let key = process.env.JWT_SECRET || "";
     const payload = {
