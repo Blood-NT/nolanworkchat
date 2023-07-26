@@ -41,8 +41,6 @@ const Messenger = () => {
     const found = await getGroup(user.id, users.senderId);
     setCurrentChat(found.data)
     console.log("ok", found.data)
-
-
     handleCurrentChat(found.data)
     console.log("ok2", currentChat)
 
@@ -61,7 +59,6 @@ const Messenger = () => {
         createAt: Date.now(),
       });
       if (currentChat == null) {
-
         openChatIfNull(data)
       }
       console.log('chatne', data)
@@ -234,7 +231,6 @@ const Messenger = () => {
                 {conversations.map((c, index) => (
                   <div
                     onClick={() => {
-
                       handleCurrentChat(c);
                     }}
                     key={index}

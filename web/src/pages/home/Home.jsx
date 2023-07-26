@@ -94,7 +94,7 @@ const Home = () => {
 
   const handleCreateJob = async (e) => {
     e.preventDefault();
-    let res = await createJobRes(jobname,jobnote,value.id,user.id);
+    let res = await createJobRes(jobId,jobname,jobnote,value.id,user.id);
     console.log("new user ", res);
     
     setNotifi([res.message]);
@@ -176,7 +176,7 @@ const Home = () => {
               variant="outlined"
               value={jobId}
               onChange={(e) => {
-                setJobName(e.target.value);
+                setJobId(e.target.value);
               }}
               sx={{ width: "80%", marginLeft: "auto", marginRight: "auto",marginTop:'20px' }}
             />

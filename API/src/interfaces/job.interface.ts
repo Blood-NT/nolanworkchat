@@ -5,6 +5,7 @@ export interface job
   id?: string;
   jobname: string;
   createat?: Date;
+  updateat?: Date;
   leaderid: string;
   adminid: string;
   jobnote: string;

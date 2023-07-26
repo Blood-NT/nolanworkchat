@@ -49,7 +49,7 @@ const getUser = (id: string) => {
 io.on("connection", (socket) => {
   // console.log("a user connected");
   socket.on("addUser", ({ id, avatar }) => {
-    console.log("add user " + id + " - ", socket.id);
+    logging.debug("add user " + id + " - ", socket.id);
     if (addUser(id, avatar, socket.id)) {
       io.emit("getUsers", users);
     }
@@ -62,16 +62,19 @@ io.on("connection", (socket) => {
       type,
     });
   });
+
   socket.on("deleteMessage", ({ receiverId }) => {
     const user = getUser(receiverId);
     io.to(user?.socketId).emit("getDeleteMessage", {});
-  });
+  }); 
+
   socket.on("sendConversations", ({ senderId, receiveId }) => {
     const sender = getUser(senderId);
     io.to(sender?.socketId).emit("getConversations", users);
     const receive = getUser(receiveId);
     io.to(receive?.socketId).emit("getConversations", users);
   });
+
   socket.on("disconnect", () => {
     console.log("a user disconnect ", socket.id);
     removeUser(socket.id);
@@ -81,5 +84,5 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(port, () => {
-  logging.info(NAME_SPACE, `Server is rrrrunning http://localhost:${port}`);
+  logging.info(NAME_SPACE, `Server is heherunning http://localhost:${port}`);
 });

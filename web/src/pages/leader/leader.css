@@ -1,20 +1,28 @@
 .homee{
     justify-content: space-between;
     display: flex;
-    padding: 0px 50px 0px 50px;
-    height: 80vh;
+    margin: 20px 50px 0px 50px;
+    border: 3px solid red;
+    border-radius: 15px;
+    height: 90vh;
+
 }
 .left_home,.right_home{
-    width: 50vw;
+    margin: 20px 0px 20px 0px;
+}
+.left_home{
+    width: 70vw;
 }
 .right_home{
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 .tabPick:hover{
     border: 1px solid #1987DE;
-    border-radius: 15pc;
+    border-radius: 15px;
 }
+
 /* 
 .MuiTabs-root .Mui-selected {
     color: #ff0000;

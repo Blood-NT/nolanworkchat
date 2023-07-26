@@ -5,8 +5,16 @@ import response from "../interfaces/response.interface";
 
 const createJobService = async (newJob:job): Promise<response> => {
   // newJob.isDelete = false;
-  newJob.createat = new Date();
 
+  const foundUser: job | null = await jobModel.findOne({
+    where: {  id: newJob.id }  });
+  if (foundUser) {
+    return { statusCode: "400", message: "idjob đã tồn tại" };
+  }
+
+  newJob.createat = new Date();
+  newJob.updateat = new Date();
+  newJob.jobdone=false;
   const job:job = await jobModel.create(newJob);
   return {
     statusCode: "200",

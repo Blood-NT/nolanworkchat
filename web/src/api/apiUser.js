@@ -2,9 +2,10 @@ import axios from "axios";
 import { apiURL } from "../config/config";
 
 //jobb
-const createJobRes = async (jobName, jobNote, leader, admin) => {
+const createJobRes = async (jobId, jobName, jobNote, leader, admin) => {
   try {
     const body = {
+      id: jobId,
       jobname: jobName,
       leaderid: leader,
       adminid: admin,
@@ -17,7 +18,37 @@ const createJobRes = async (jobName, jobNote, leader, admin) => {
     console.log(`${error}`);
   }
 };
+const getAllJob = async (username) => {
+  try {
+    const res = await axios.get(`${apiURL}/job/get-jobs/${username}`);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
 
+
+//task
+const createTaskRes = async (jobvalue, taskId, taskName, taskNote, startDate, endDate, lead, mem) => {
+  try {
+    const body = {
+
+      id:taskId,
+      start:startDate,
+      end:endDate,
+      jobid: jobvalue,
+      taskname: taskName,
+      leaderid: lead,
+      memid: mem,
+      tasknote: taskNote
+
+    };
+    const res = await axios.post(`${apiURL}/task/create-task`, body);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
 
 const login = async (email, password) => {
   try {
@@ -105,7 +136,7 @@ const getUser = async (textSearch) => {
   }
 };
 
-const getAllUser = async (textSearch) => {
+const getAllUser = async () => {
   try {
     const res = await axios.get(`${apiURL}/user/get-all-user`);
     return res.data;
@@ -146,5 +177,7 @@ export {
   forgotPassword,
   getAllUser,
   lockUser,
-  createJobRes
+  createJobRes,
+  getAllJob,
+  createTaskRes
 };

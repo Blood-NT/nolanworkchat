@@ -3,15 +3,20 @@ import { taskModel } from "../models/task.model";
 import { task } from "../interfaces/task.interface";
 import response from "../interfaces/response.interface";
 
-const createTaskService = async (newGroup: task): Promise<response> => {
+const createTaskService = async (newTask: task): Promise<response> => {
+  const foundUser: task | null = await taskModel.findOne({
+    where: {  id: newTask.id }  });
+  if (foundUser) {
+    return { statusCode: "400", message: "idTask đã tồn tại" };
+  }
 
-  newGroup.createat = new Date();
-  newGroup.start = new Date();
-  newGroup.end = new Date();
-  newGroup.updatedAt = new Date();
-  newGroup.isdone= false;
-  newGroup.ischeck=false;
-  const group: task = await taskModel.create(newGroup);
+
+  newTask.createat = new Date();
+
+  newTask.updatedAt = new Date();
+  newTask.isdone= false;
+  newTask.ischeck=false;
+  const group: task = await taskModel.create(newTask);
   return {
     statusCode: "200",
     message: "tạo kết nối thành công",
@@ -159,7 +164,7 @@ const notDoneTask = async (
   };
 };
 
-const updateTimeTaskService = async (id: number): Promise<response> => {
+const updateTimeTaskService = async (id: string): Promise<response> => {
   await taskModel.update(
     {
       updatedAt: new Date(),

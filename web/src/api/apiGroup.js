@@ -45,6 +45,7 @@ const getGroup = async (sender, receive) => {
     const res = await axios.get(
       `${apiURL}/group/get-group/${sender}/${receive}`
     );
+    
     return res.data;
   } catch (error) {
     console.log(`${error}`);
