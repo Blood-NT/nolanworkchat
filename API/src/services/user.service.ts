@@ -132,6 +132,22 @@ const loginByTokenService = async (token: string): Promise<any> => {
   }
 };
 
+
+
+const changepassService = async(email: string,   password: string,)  => {
+  let foundUser: user | null = await getUserByEmail(email);
+
+  if (!foundUser) {
+    return { statusCode: "400", message: "không tìm thấy người dùng" };
+  }
+  const checkPass = bcrypt.compareSync(password, foundUser.password);
+  if (checkPass === false) {
+    return { statusCode: "400", message: "mật khẩu không đúng" };
+  }
+  return { statusCode: "200", message: "thay đổi thành công" };
+};
+
+
 const loginService = async (
   email: string,
   password: string
@@ -273,4 +289,5 @@ export {
   verifyUserService,
   changePasswordUserService,
   lockUserService,
+  changepassService
 };

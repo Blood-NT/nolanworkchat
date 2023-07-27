@@ -21,6 +21,8 @@ router.post("/create-user", userController.createUser);
 
 router.post("/forgot-password", userController.createForgotPassword);
 
+router.post("/change-password", userController.changePassword);
+
 router.post("/login", userController.login);
 
 router.post("/login-token", userController.loginByToken);

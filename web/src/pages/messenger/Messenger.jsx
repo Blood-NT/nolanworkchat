@@ -232,6 +232,7 @@ const Messenger = () => {
                   <div
                     onClick={() => {
                       handleCurrentChat(c);
+                      console.log( c,user)
                     }}
                     key={index}
                   >

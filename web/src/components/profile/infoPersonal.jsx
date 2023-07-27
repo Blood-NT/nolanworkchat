@@ -3,7 +3,11 @@ import { useEffect, useState, useContext, useRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { updateUser } from "../../api/apiUser";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { updateUser ,changePass} from "../../api/apiUser";
 import { NotifiContext } from "../../context/notifiContext";
 import { uploadFile } from "../../ultis/uploadFile";
 
@@ -16,6 +20,50 @@ export default function InfoPersonal({ user, setUser }) {
   const [lastName, setLastName] = useState("");
   const [describe, setDescribe] = useState("");
   const [avatar, setAvatar] = useState();
+
+  const [open, setOpen] = React.useState(false);
+  const [pass, setPass] = React.useState('');
+  const [newPass, setNewPass] = React.useState('');
+  const [confirmPass, setConfirmPass] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [passwordMismatch, setPasswordMismatch] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(!open);
+    setPass('');
+    setNewPass('');
+    setConfirmPass('');
+  };
+
+  const handleSubscribe = async() => {
+    if (newPass === confirmPass) {
+
+      let res = await changePass(user.email,pass,newPass);
+      console.log(res);
+      if (res.statusCode === "200") {
+
+        setNotifi(["Xác thực email của bạn để thay đổi mật khẩu", "success"]);
+      handleClickOpen();
+
+        return;
+      }
+      else{
+        if(res.statusCode==="400" && res.message==="mật khẩu không đúng")
+        {
+
+          setNotifi(["Mật khẩu bạn nhập không đúng"]);
+
+          return;
+        }
+        else{
+        setNotifi([res.message]);
+        }
+      }
+      handleClickOpen();
+    } else {
+      setPasswordMismatch(true);
+    }
+  };
   useEffect(() => {
     console.log("reset ");
     setId(user?.id || "");
@@ -64,7 +112,7 @@ export default function InfoPersonal({ user, setUser }) {
       noValidate
       autoComplete="off"
     >
-      <div>
+     <div>
         <TextField disabled id="outlined-required" label="Id" value={id} />
         <TextField
           disabled
@@ -116,7 +164,67 @@ export default function InfoPersonal({ user, setUser }) {
         }}
         sx={{ paddingLeft: "150px", width: "35ch !important" }}
       />
-      <div style={{ marginLeft: "60%", marginTop: "10px" }}>
+
+      <div style={{ marginTop: "10px" ,display:"flex", justifyContent: "space-evenly",}}>
+
+        <div className="ok" >
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Thay đổi mật khẩu 
+        </Button>
+        <Dialog open={open} onClose={handleClickOpen}>
+          <DialogTitle>Thay đổi mật khẩu</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Mật khẩu cũ"
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              variant="standard"
+              value={pass}
+              onChange={(e) => {
+                setPass(e.target.value);
+              }}
+            />
+            <TextField
+              
+              margin="dense"
+              id="newPass"
+              label="Mật khẩu Mới"
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              variant="standard"
+              value={newPass}
+              onChange={(e) => {
+                setNewPass(e.target.value);
+                setPasswordMismatch(false);
+              }}
+              error={passwordMismatch}
+              helperText={passwordMismatch ? "mật khẩu mới nhập lại phải giống nhau" : ''}
+            />
+            <TextField
+              
+              margin="dense"
+              id="confirmPass"
+              label="Xác nhận mật khẩu"
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              variant="standard"
+              value={confirmPass}
+              onChange={(e) => {
+                setConfirmPass(e.target.value);
+                setPasswordMismatch(false);
+              }}
+              error={passwordMismatch}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClickOpen}>Cancel</Button>
+            <Button onClick={handleSubscribe}>Subscribe</Button>
+          </DialogActions>
+        </Dialog>
+        </div>
         <Button variant="contained" onClick={handleUpdateUser}>
           Lưu thay đổi
         </Button>

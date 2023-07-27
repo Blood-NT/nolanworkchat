@@ -50,6 +50,16 @@ const createTaskRes = async (jobvalue, taskId, taskName, taskNote, startDate, en
   }
 };
 
+const getTaskByUser = async(username) =>
+{
+  try {
+    const res = await axios.get(`${apiURL}/task/get-task/${username}`);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
 const login = async (email, password) => {
   try {
     const body = {
@@ -166,7 +176,17 @@ const lockUser = async (sender, email, lock) => {
     console.log(`${error}`);
   }
 };
-
+const changePass = async (email, oldPass,newPass) => {
+  try {
+    const body = {
+      email,
+      oldPass,
+      newPass
+    };
+    const res = await axios.post(`${apiURL}/user/change-password`, body);
+    return res.data;
+  } catch (err) { }
+};
 export {
   login,
   registerUser,
@@ -179,5 +199,7 @@ export {
   lockUser,
   createJobRes,
   getAllJob,
-  createTaskRes
+  createTaskRes,
+  getTaskByUser,
+  changePass
 };

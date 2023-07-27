@@ -15,6 +15,7 @@ import {
   verifyUserService,
   changePasswordUserService,
   lockUserService,
+  changepassService
 } from "../services/user.service";
 import {
   sendVerificationEmail,
@@ -71,6 +72,31 @@ const createForgotPassword = async (req: Request, res: Response) => {
     };
     await createVerifyPasswordService(newVerify);
     res.status(200).json({ statusCode: "200", message: "Tạo thành công" });
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+const changePassword = async (req: Request, res: Response) => {
+  try {
+    const { email, oldPass,newPass } = req.body;
+    const response  =await changepassService(email,oldPass);
+    if (response.statusCode === "200") {
+      const uniqueString = uuidV4();
+
+    await sendVerifiForgotPassword(email, uniqueString);
+    const newww: any = {
+      email: email,
+      uniqueString: uniqueString,
+      password: newPass,
+    };
+    await createVerifyPasswordService(newww);
+    res.status(200).json({ statusCode: "200", message: "Tạo thành công" });
+  }
+
+    if(response.message=="mật khẩu không đúng")
+    {
+      res.status(200).json({ statusCode: "400", message: "mật khẩu không đúng" });
+    }
   } catch (error) {
     res.status(200).json({ statusCode: "400", message: `${error}` });
   }
@@ -229,6 +255,7 @@ export default {
   sendMail,
   verifyEmail,
   verified,
+  changePassword,
   createForgotPassword,
   verifyChangePassword,
   lockUser,
