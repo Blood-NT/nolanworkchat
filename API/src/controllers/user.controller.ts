@@ -5,6 +5,7 @@ import response from "../interfaces/response.interface";
 import { user } from "../interfaces/user.interface";
 import { verify } from "../interfaces/verify.interface";
 import { forgotPassword } from "../interfaces/forgotPassword.interface";
+// import logging from "../config/logging";
 import {
   createUserService,
   loginService,
@@ -15,7 +16,8 @@ import {
   verifyUserService,
   changePasswordUserService,
   lockUserService,
-  changepassService
+  changepassService,
+  setRoleService
 } from "../services/user.service";
 import {
   sendVerificationEmail,
@@ -117,6 +119,16 @@ const lockUser = async (req: Request, res: Response) => {
     const { email, lock } = req.body;
     const response: response = await lockUserService(email, lock);
     res.status(200).json(response);
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+const setRole = async (req: Request, res: Response) => {
+  try {
+    const { uid, role } = req.body;
+    const response: response = await setRoleService(uid, role);
+    res.status(200).json(response);
+
   } catch (error) {
     res.status(200).json({ statusCode: "400", message: `${error}` });
   }
@@ -259,4 +271,5 @@ export default {
   createForgotPassword,
   verifyChangePassword,
   lockUser,
+  setRole
 };

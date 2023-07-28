@@ -5,7 +5,8 @@ import response from "../interfaces/response.interface";
 
 const createTaskService = async (newTask: task): Promise<response> => {
   const foundUser: task | null = await taskModel.findOne({
-    where: {  id: newTask.id }  });
+    where: { id: newTask.id }
+  });
   if (foundUser) {
     return { statusCode: "400", message: "idTask đã tồn tại" };
   }
@@ -14,8 +15,8 @@ const createTaskService = async (newTask: task): Promise<response> => {
   newTask.createat = new Date();
 
   newTask.updatedAt = new Date();
-  newTask.isdone= false;
-  newTask.ischeck=false;
+  newTask.isdone = false;
+  newTask.ischeck = false;
   const group: task = await taskModel.create(newTask);
   return {
     statusCode: "200",
@@ -88,7 +89,7 @@ const getTaskService = async (userId: string): Promise<response> => {
   };
 };
 //
-const  getAllTaskByLeaderService= async (userId: string): Promise<response> => {
+const getAllTaskByLeaderService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
       [Op.or]: [{ leaderid: userId }, { memid: userId }],
@@ -109,7 +110,7 @@ const getTaskByLeaderService = async (
   memid: string
 ): Promise<response> => {
 
-  const foundGroup:task[] | null = await taskModel.findAll({
+  const foundGroup: task[] | null = await taskModel.findAll({
     where: {
       leaderid: leaderid,
       memid: memid,
@@ -124,6 +125,27 @@ const getTaskByLeaderService = async (
 };
 
 
+const checkTaskServices = async (
+  idTask: string,
+  uId: string
+): Promise<response> => {
+  await taskModel.update(
+    {
+      isdone: true,
+      updatedAt: new Date(),
+    },
+    {
+      where: {
+        memid: uId ,
+        id: idTask
+      },
+    }
+  );
+  return {
+    statusCode: "200",
+    message: "checkTask",
+  };
+};
 
 
 const updateIsDoneTaskService = async (
@@ -189,5 +211,6 @@ export {
   getAllTaskByLeaderService,
   updateIsDoneTaskService,
   updateTimeTaskService,
-  notDoneTask
+  notDoneTask,
+  checkTaskServices
 };

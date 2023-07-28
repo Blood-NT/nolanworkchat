@@ -14,7 +14,12 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState, useContext } from "react";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
-import { getAllUser, lockUser } from "../../api/apiUser";
+import { getAllUser, lockUser, setRole } from "../../api/apiUser";
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const columns = [
   { id: "avatar", label: "Avatar" },
@@ -36,7 +41,7 @@ const columns = [
   },
   {
     id: "lock",
-    label: "Tài khoản",
+    label: "role",
     format: (value) => value.toFixed(2),
   },
   {
@@ -59,6 +64,7 @@ const UserMagager = () => {
   const [textSearch, setTextSearch] = useState("");
   const { setNotifi } = useContext(NotifiContext);
   const { user } = useContext(UserContext);
+  // const [rolee, setRole] = React.useState('leader');
 
   const fetchData = async () => {
     const res = await getAllUser();
@@ -83,6 +89,28 @@ const UserMagager = () => {
     }
     setNotifi(["Mở khóa tài khoản thành công", "success"]);
   };
+
+
+  const handlesetRole = async (id, role) => {
+
+
+
+    console.log(id, role)
+
+    const res = await setRole(id, role);
+    if (res.statusCode !== "200") {
+      setNotifi([res.message]);
+      return;
+    }
+    await fetchData();
+    // if (lock === true) {
+    //   setNotifi(["Khóa tài khoản thành công", "success"]);
+    //   return;
+    // }
+    // setNotifi(["Mở khóa tài khoản thành công", "success"]);
+  };
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -178,7 +206,7 @@ const UserMagager = () => {
                       role="checkbox"
                       tabIndex={-1}
                       key={row.code}
-                      
+
                     >
                       {columns.map((column) => {
                         const value = row[column.id];
@@ -191,9 +219,25 @@ const UserMagager = () => {
                         }
                         if (column.id === "lock") {
                           return (
-                            <TableCell key={column.id} align={column.align}>
-                              {value === false ? "Chưa khóa" : "Bị khóa"}
-                            </TableCell>
+                            // <TableCell key={column.id} align={column.align}>
+                            //   {value === false ? "Chưa khóa" : "Bị khóa"}
+
+                            <Box sx={{ minWidth: 120 }}>
+                              <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label"></InputLabel>
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  value={row["role"]}
+                                  onChange={(e) => handlesetRole(row["id"], e.target.value)}
+                                >
+                                  <MenuItem value={'admin'}>admin</MenuItem>
+                                  <MenuItem value={'project'}>projectManager</MenuItem>
+                                  <MenuItem value={'leader'}>leader</MenuItem>
+                                  <MenuItem value={'user'}>member</MenuItem>
+                                </Select>
+                              </FormControl>
+                            </Box>
                           );
                         }
                         if (column.id === "status") {

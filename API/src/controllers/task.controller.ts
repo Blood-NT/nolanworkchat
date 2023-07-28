@@ -11,7 +11,8 @@ import {
   updateIsDoneTaskService,
   getTaskByTimeService,
   getAllTaskByLeaderService,
-  getTaskByLeaderService
+  getTaskByLeaderService,
+  checkTaskServices
 } from "../services/task.service";
 
 const createTask = async (req: Request, res: Response) => {
@@ -104,11 +105,26 @@ const doneTask = async (req: Request, res: Response) => {
   }
 };
 
+const checkTask = async (req: Request, res: Response) => {
+  try {
+    const idTask: string = req.body.idTask;
+    const uID: string = req.body.uId;
+    const response: response = await checkTaskServices(
+      idTask,
+      uID
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+
 
 export default {
   createTask,//taoj
   getTask,//laays mowis caapj nhaatj
   doneTask,// done
+  checkTask,
   getTaskByJob,//laays theo job
   getTaskByDeadline,//lays theo deadline 
   getTaskByTime,//tassk mowis giao

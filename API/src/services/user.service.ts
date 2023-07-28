@@ -74,7 +74,7 @@ const getAllUserService = async () => {
       // role: "user",
       verify: true,
     },
-    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock"],
+    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock","role"],
     order: [["id", "ASC"]],
   });
   await map(foundUser, (data, index) => {
@@ -279,6 +279,22 @@ const lockUserService = async (
   };
 };
 
+const setRoleService = async (
+  uid: string,
+  role: string
+): Promise<response> => {
+  await userModel.update(
+    {
+      role:role,
+    },
+    { where: { id:uid} }
+  );
+  return {
+    statusCode: "200",
+    message: "cập nhật thành công ",
+  };
+};
+
 export {
   createUserService,
   getUserService,
@@ -289,5 +305,6 @@ export {
   verifyUserService,
   changePasswordUserService,
   lockUserService,
-  changepassService
+  changepassService,
+  setRoleService
 };

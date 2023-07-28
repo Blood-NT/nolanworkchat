@@ -4,7 +4,7 @@ import response from "../interfaces/response.interface";
 
 const createVerifyService = async (newVerify: verify): Promise<response> => {
   newVerify.createAt = new Date();
-  newVerify.effectiveSeconds = 3600;
+  newVerify.effectiveSeconds = 3600;//60p
   await verifyModel.create(newVerify);
   return { statusCode: "200", message: "tạo xác minh thành công" };
 };

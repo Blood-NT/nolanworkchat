@@ -155,6 +155,29 @@ const getAllUser = async () => {
   }
 };
 
+const setRole = async ( uid, role) => {
+  try {
+    const fetchData = async () => {
+      const body = { uid, role };
+      const headers = {
+        headers: { access_token: localStorage.getItem("accessToken") },
+      };
+      const res = await axios.post(`${apiURL}/user/set-role`, body, headers);
+      console.log(res,"hehe")
+      return res.data;
+    };
+    let data = await fetchData();
+    if (data.statusCode === "410") {
+      const user = await loginByToken();
+      localStorage.setItem("accessToken", user.data.accessToken);
+      data = await fetchData();
+    }
+    return data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
 const lockUser = async (sender, email, lock) => {
   try {
     const fetchData = async () => {
@@ -196,6 +219,7 @@ export {
   getUser,
   forgotPassword,
   getAllUser,
+  setRole,
   lockUser,
   createJobRes,
   getAllJob,

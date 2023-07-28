@@ -15,5 +15,6 @@ router.get("/get-task-by-job/:userId", taskController.getTaskByJob);
 // router.post("/create-job", authUser, jobController.createJob);
 router.post("/create-task",  taskController.createTask);
 router.put("/done-task", taskController.doneTask);
+router.put("/check-task", taskController.checkTask);
 
 export default router;
