@@ -6,7 +6,7 @@ import ForgotPassword from "./pages/forgotPassword/forgotPassword";
 import UserMagager from "./pages/admin/user";
 import Home from "./pages/home/Home";
 import Leader from "./pages/leader/Leader";
-
+import Taskmess from "./pages/taskmess/Taskmess"
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { loginByToken } from "./api/apiUser";
@@ -56,7 +56,9 @@ function App() {
       <Routes>
         <Route path="/admin/job" element={<Home />} />
       </Routes>
-
+      <Routes>
+        <Route path="/admin/mess" element={<Taskmess />} />
+      </Routes>
       <Routes>
         <Route path="/admin/user-manager" element={<UserMagager />} />
       </Routes>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useContext } from "react";
-import "./messenger.css";
+import "./taskmessenger.css";
 import send from "../../assets/send.png";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -8,16 +8,17 @@ import Topbar from "../../components/topbar/Topbar";
 import Conversation from "../../components/conversations/Conversation";
 import MessageText from "../../components/message/messageText";
 import MessageImage from "../../components/message/messageImage";
-import ChatOnline from "../../components/chatOnline/chatOnline";
 import InfoUser from "../../components/infoUser/infoUser";
 import { getGroupByUser, getGroup } from "../../api/apiGroup";
+import { getTaskByUser } from "../../api/apiTask";
+import { getTaskMess, createTaskMessages } from "../../api/apiMessages";
 import { getUserByUsername } from "../../api/apiUser";
-import { getMessagesInGroup, createMessages } from "../../api/apiMessages";
+
 import { uploadImage } from "../../ultis/uploadFile";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
 
-const Messenger = () => {
+const Taskmess = () => {
   const MAX_SIZE = useRef(2097000); // 2mb
   const { user, socket } = useContext(UserContext);
   const [conversations, setConversations] = useState([]);
@@ -26,15 +27,25 @@ const Messenger = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState("");
-  const [onlineUsers, setOnlineUsers] = useState([]);
   const [image, setImage] = useState();
   const [base64image, setBase64image] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadData, setLoadData] = useState(0);
   const [textSearch, setTextSearch] = useState("");
   const { setNotifi } = useContext(NotifiContext);
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const inputFile = useRef(null);
+
+  const openChatIfNull = async (users) => {
+
+    const found = await getGroup(user.id, users.senderId);
+    setCurrentChat(found.data)
+    console.log("ok", found.data)
+    handleCurrentChat(found.data)
+    console.log("ok2", currentChat)
+  };
+
   useEffect(() => {
     socket.on("getMessage", (data) => {
       setArrivalMessage({
@@ -43,22 +54,25 @@ const Messenger = () => {
         type: data.type,
         createAt: Date.now(),
       });
-     });
+      console.log("ok021")
+    });
     socket.on("getDeleteMessage", () => {
       setLoadData((loadData) => ++loadData);
     });
   }, []);
-//kiểm tra xem tin nhắn có trong đoạn chat hiện tại hay kgoong. nếu có thì thêm vào
+  //?????
   useEffect(() => {
     arrivalMessage &&
-      (arrivalMessage.sender === currentChat?.sender ||
-        arrivalMessage.sender === currentChat.receive) &&
+      (arrivalMessage.sender === currentChat?.leaderid ||
+        arrivalMessage.sender === currentChat.memid) &&
       setMessages((messages) => [...messages, arrivalMessage]);
+
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
     socket.emit("addUser", { id: user?.id, avatar: user?.avatar });
   }, []);
+
 
   const fetchOnlineUser = async (users) => {
     const newUser = [];
@@ -79,17 +93,17 @@ const Messenger = () => {
 
   useEffect(() => {
     socket.on("getConversations", async (users) => {
-      const res = await getGroupByUser(user?.id);
+      const res = await getTaskByUser(user?.id);
       if (res.statusCode === "200") {
         setConversations(res.data || []);
+        console.log("heheok", res)
       }
-      fetchOnlineUser(users);
     });
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getGroupByUser(user?.id);
+      const res = await getTaskByUser(user?.id);
       if (res.statusCode === "200") {
         if (textSearch === "") {
           setConversations(res.data || []);
@@ -110,7 +124,7 @@ const Messenger = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getMessagesInGroup(currentChat?.id);
+      const res = await getTaskMess(currentChat.id);
       if (res.statusCode === "200") {
         setMessages(res.data);
       }
@@ -135,7 +149,7 @@ const Messenger = () => {
       return;
     }
     const receiverId =
-      currentChat.sender === user.id ? currentChat.receive : currentChat.sender;
+      currentChat.leaderid === user.id ? currentChat.memid : currentChat.leaderid;
     let type = "text";
     if (image) {
       if (image.size > MAX_SIZE.current) {
@@ -155,7 +169,7 @@ const Messenger = () => {
     });
 
     try {
-      const res = await createMessages(
+      const res = await createTaskMessages(
         currentChat.id,
         sendMessage,
         user.id,
@@ -163,24 +177,26 @@ const Messenger = () => {
       );
       if (res.statusCode === "200") {
         setMessages([...messages, res.data]);
+
       }
       setNewMessage("");
       setImage(null);
       setBase64image("");
       setLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
   const handleCurrentChat = (c) => {
+
     const fetchUser = async () => {
-      let oppositeId = c.sender === user.id ? c.receive : c.sender;
+      let oppositeId = c.leaderid === user.id ? c.memid : c.leaderid;
       const res = await getUserByUsername(oppositeId);
       if (res.statusCode === "200") {
         setOppositeUser(res.data);
       }
     };
+
     fetchUser();
     setCurrentChat(c);
     console.log("chekk", currentChat)
@@ -193,8 +209,7 @@ const Messenger = () => {
           <div className="messenger">
             <div className="chatMenu" style={{ backgroundColor: "#EFFBFB" }}>
               <div className="chatMenuWrapper">
-                <ChatOnline onlineUsers={onlineUsers} currentId={user.id} />
-                <h3>Tất cả kết nối</h3>
+                <h3>Tất cả các task</h3>
                 <Box sx={{ width: "80%" }}>
                   <TextField
                     fullWidth
@@ -211,26 +226,33 @@ const Messenger = () => {
                   <div
                     onClick={() => {
                       handleCurrentChat(c);
-
+                      // console.log( c.id)
                     }}
                     key={index}
                   >
-                    <Conversation conversation={c} currentUser={user} />
+                    <div className="tasklist">
+                      <span>{c.taskname}</span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
             <div className="chatBox">
+
               <div className="chatBoxWrapper">
+
                 {currentChat ? (
                   <>
                     <div className="chatBoxTop">
+
                       {oppositeUser?.id &&
                         messages.map((m, index) => {
                           return (
                             <>
+
                               {m.type === "text" ? (
                                 <MessageText
+
                                   message={m}
                                   own={m.sender === user.id}
                                   messages={messages}
@@ -338,11 +360,19 @@ const Messenger = () => {
             </div>
             <div className="chatOnline" style={{ backgroundColor: "#EFFBFB" }}>
               <div className="chatOnlineWrapper">
-                <InfoUser
-                  oppositeUser={oppositeUser}
-                  setConversations={setConversations}
-                  setOppositeUser={setOppositeUser}
-                />
+
+                {currentChat ? (
+                  <div className="infotask">
+                    <span>task id: {currentChat.id}</span>
+                    <span>task taskname: {currentChat.taskname}</span>
+                    <span>task jobid: {currentChat.jobid}</span>
+                    <span>task lead: {oppositeUser.firstName + " " + oppositeUser.lastName}</span>
+                    <span>task start: {currentChat.start}</span>
+                    <span>task end: {currentChat.end}</span>
+                  </div>) : (<span>hãy mở task</span>)
+                }
+
+
               </div>
             </div>
           </div>
@@ -352,7 +382,7 @@ const Messenger = () => {
   );
 };
 
-export default Messenger;
+export default Taskmess;
 
 let styles = {
   icon: {

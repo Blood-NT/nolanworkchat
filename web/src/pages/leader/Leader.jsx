@@ -263,7 +263,7 @@ const Home = () => {
                     </li>
                   )}
                   renderInput={(params) => (
-                    <TextField {...params} required label="Controllable" />
+                    <TextField {...params} required label="Chọn project" />
                   )}
                 />
                 <TextField
@@ -314,7 +314,7 @@ const Home = () => {
                       </li>
                     )}
                     renderInput={(params) => (
-                      <TextField {...params} required label="Controllable" />
+                      <TextField {...params} required label="Chọn người đảm nhận" />
                     )}
                   />
                 </div>

@@ -16,7 +16,7 @@ const createTaskMessagesService = async (
 };
 
 const getTaskMessagesService = async (
-  taskid: number
+  taskid: string
 ): Promise<response> => {
   const allMessaes: taskmessages[] = await taskmessagesModel.findAll({
     where: {

@@ -33,6 +33,39 @@ const createMessages = async (groupId, messages, sender, type) => {
   }
 };
 
+const createTaskMessages = async (groupId, messages, sender, type) => {
+  try {
+    const fetchData = async () => {
+      const body = {
+        taskid: groupId,
+        messages: messages,
+        sender: sender,
+        type: type,
+      };
+      const headers = {
+        headers: { access_token: localStorage.getItem("accessToken") },
+      };
+      const res = await axios.post(
+        `${apiURL}/task-message/create-taskmessages`,
+        body,
+        headers
+      );
+      return res.data;
+    };
+    let data = await fetchData();
+    if (data.statusCode === "410") {
+      const user = await loginByToken();
+      localStorage.setItem("accessToken", user.data.accessToken);
+      data = await fetchData();
+    }
+    return data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
+
+
 const getMessagesInGroup = async (groupId) => {
   try {
     const res = await axios.get(`${apiURL}/messages/get-messages/${groupId}`);
@@ -41,6 +74,16 @@ const getMessagesInGroup = async (groupId) => {
     console.log(`${error}`);
   }
 };
+
+const getTaskMess = async (groupId) => {
+  try {
+    const res = await axios.get(`${apiURL}/task-message/get-taskmessages/${groupId}`);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
 
 const deleteMessagesInGroup = async (sender, messagesId) => {
   try {
@@ -68,4 +111,4 @@ const deleteMessagesInGroup = async (sender, messagesId) => {
   }
 };
 
-export { createMessages, getMessagesInGroup, deleteMessagesInGroup };
+export { createMessages, getMessagesInGroup, deleteMessagesInGroup,getTaskMess,createTaskMessages };

@@ -48,7 +48,7 @@ export default function ForgotPassword() {
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">Nhắn tin online</h3>
+          <h3 className="loginLogo">Nolan Work</h3>
           <span className="loginDesc">
             Đăng nhập vào ứng để kết nối đến mọi người.
           </span>

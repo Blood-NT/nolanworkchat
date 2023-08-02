@@ -47,7 +47,7 @@ export default function Topbar({ setConversations, socket }) {
             //   window.location.reload();
             // }}
           >
-            <span className="logo">Nhắn tin online</span>
+            <span className="logo">Nolan Work</span>
           </Link>
           <Link
             to="/leader/job"
@@ -60,7 +60,14 @@ export default function Topbar({ setConversations, socket }) {
             style={{ textDecoration: "none" }}
           >
             <span className="logo">admin</span>
-          </Link> 
+          </Link>
+          <Link
+            to="/admin/mess"
+            style={{ textDecoration: "none" }}
+          >
+            <span className="logo">adminMess</span>
+          </Link>
+
         </div>
         <div className="topbarCenter">
           <div className="searchbar">

@@ -167,12 +167,12 @@ const Home = () => {
             onSubmit={handleCreateJob}
             style={{ height: "400px", width: "500px", }}
           >
-            <h1 style={{ textAlign: "center" }}> tạo Job </h1>
+            <h1 style={{ textAlign: "center" }}> tạo project </h1>
             <TextField
               required
               type="text"
               id="outlined-basic"
-              label="job id"
+              label="project id"
               variant="outlined"
               value={jobId}
               onChange={(e) => {
@@ -184,7 +184,7 @@ const Home = () => {
               required
               type="text"
               id="outlined-basic"
-              label="Tên job"
+              label="Tên project"
               variant="outlined"
               value={jobname}
               onChange={(e) => {
@@ -227,7 +227,7 @@ const Home = () => {
               required
               type="text"
               id="outlined-basic"
-              label="job note"
+              label="project note"
               variant="outlined"
               multiline
               rows={5} // Số dòng mặc định
@@ -246,7 +246,7 @@ const Home = () => {
               type="submit"
               style={{ width: "80%", marginLeft: "auto", marginRight: "auto" ,marginTop:'20px'}}
             >
-              Tạo job
+              Tạo project
             </button>
 
           </form>
