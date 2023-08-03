@@ -170,7 +170,7 @@ const Home = () => {
   };
 
 
-  //get tassk list
+  // get tassk list
   useEffect(() => {
     const fetchData = async () => {
       const res = await getTaskByUser(user?.id);
@@ -181,11 +181,101 @@ const Home = () => {
         searchConversation.push(c);
       }
       );
+      setTaskList(searchConversation);
       setTaskList(searchConversation.sort((a, b) => a.taskname.localeCompare(b.taskname)));
     };
     fetchData();
   }, [user?.id]);
 
+  const handelDate = async (e) => {
+    setTaskList([])
+
+    const dateObj = e.format('YYYY-MM-DD');
+    const res = await getTaskByUser(user?.id);
+
+    const searchConversation = [];
+    res.data.map((c) => {
+      searchConversation.push(c);
+    }
+    );
+
+    // Lọc ra các phần tử có thuộc tính "end" bằng giá trị của biến "date"
+    const filteredData =  searchConversation.filter(item => item.end === dateObj);
+    setTaskList(filteredData)
+  }
+  const handleSelect = async (event, value) => {
+
+
+    const res = await getTaskByUser(user?.id);
+
+    const searchConversation = [];
+    res.data.map((c) => {
+      searchConversation.push(c);
+    }
+    );
+    // ifff
+    setTaskList(searchConversation);
+    if (value.val === 1) {
+      const today = new Date().toISOString().split('T')[0];
+
+      const datafil = searchConversation.filter(item => item.updatedAt === today);
+
+      console.log(datafil);
+      setTaskList(datafil);
+
+    }
+    if (value.val === 2) {
+      //sắp xếp theo deadl;ine
+      setTaskList(searchConversation);
+    }
+    if (value.val === 3) {
+      // theo tên a-> z
+      setTaskList(searchConversation);
+    }
+    if (value.val === 4) {
+      // theo tên z-> a
+      setTaskList(searchConversation);
+    }
+    if (value.val === 5) {
+      // theo update
+      setTaskList(searchConversation);
+    }
+    if (value.val === 6) {
+      // theo ngày tạo
+      setTaskList(searchConversation);
+    }
+    if (value.val === 7) {
+      console.log("sort", searchConversation)
+
+      if (user.role == "admin") {
+
+        searchConversation.sort((a, b) => {
+          if (a.memid < b.memid) {
+            return 1;
+          }
+          if (a.memid > b.memid) {
+            return -1;
+          }
+          return 0;
+        });
+        console.log("done sort", searchConversation)
+      }
+      // theo user
+      setTaskList(searchConversation);
+    }
+  };
+
+
+  const tasklistt = [
+    { label: 'deadline hôm nay', val: 1 },
+    { label: 'deadline', val: 2 },
+    { label: 'a -> z', val: 3 },
+    { label: 'z -> a', val: 4 },
+    { label: 'mới cập nhật', val: 5 },
+    { label: 'task mới tạo', val: 6 },
+    { label: 'lọc theo user', val: 7 },
+
+  ];
 
   return (
     <>
@@ -224,9 +314,9 @@ const Home = () => {
             >
               <Tab className="tabPick" label="tạo task" />
               <Tab className="tabPick" label="LỊCH" />
-              <Tab className="tabPick" label="TASK" />
-              <Tab className="tabPick" label="DEADLINE" />
-              <Tab className="tabPick" label="TASKEND" />
+              <Tab className="tabPick" label="DANH SÁCH TASK" />
+              <Tab className="tabPick" label="DEADLINE HÔM NAY" />
+              <Tab className="tabPick" label="TASK MỚI UPDATE" />
 
 
             </Tabs>
@@ -361,6 +451,31 @@ const Home = () => {
               LỊCH
             </TabPanel>
             <TabPanel tvalue={tvalue} index={2}>
+
+              <div className="taskList" sx={{ width: "100%" }} >
+                <TextField
+                  fullWidth
+                  id="standard-basic"
+                  label="Tìm kiếm"
+                  variant="standard"
+                  value={textSearch}
+                  onChange={(e) => {
+                    setTextSearch(e.target.value);
+                  }}
+                />
+
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={tasklistt}
+                  sx={{ width: 300 }}
+                  getOptionLabel={(option) => option.label}
+                  renderInput={(params) => <TextField {...params} label="sắp xếp" />}
+                  onChange={handleSelect}
+                />
+
+              </div>
+
               {taskList.map((c, index) => (
                 <div
                   onClick={() => {
@@ -373,6 +488,8 @@ const Home = () => {
                   <Picker conversation={c} />
                 </div>
               ))}
+
+
             </TabPanel>
           </Box>
 
@@ -380,9 +497,7 @@ const Home = () => {
         <div className="right_home" style={{ border: '3px solid #F5F5F5' }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar
-              onChange={(e) => {
-                console.log(e.format('DD-MM-YYYY')); // Log the selected date to the console
-              }}
+              onChange={handelDate}
             />
           </LocalizationProvider>
         </div>

@@ -109,11 +109,16 @@ const Taskmess = () => {
           setConversations(res.data || []);
           return;
         }
+        console.log("searchhhh",res)
+
         const searchConversation = [];
         res.data.map((c) => {
-          const friendId = c.sender === user.id ? c.receive : c.sender;
-          if (friendId.includes(textSearch) === true) {
+          const check = c.taskname
+          if (check.includes(textSearch) === true) {
+            
             searchConversation.push(c);
+        console.log("search",searchConversation)
+
           }
         });
         setConversations(searchConversation);
@@ -371,7 +376,6 @@ const Taskmess = () => {
                     <span>task end: {currentChat.end}</span>
                   </div>) : (<span>hãy mở task</span>)
                 }
-
 
               </div>
             </div>

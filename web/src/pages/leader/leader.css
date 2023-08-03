@@ -22,7 +22,14 @@
     border: 1px solid #1987DE;
     border-radius: 15px;
 }
+.taskList{
+    justify-content: space-around;
+    display: flex;
+}
 
+[role="tabpanel"] {
+    width: 100% !important;
+}
 /* 
 .MuiTabs-root .Mui-selected {
     color: #ff0000;
