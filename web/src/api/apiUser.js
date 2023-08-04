@@ -154,6 +154,14 @@ const getAllUser = async () => {
     console.log(`${error}`);
   }
 };
+const getuserWithRole = async (role) => {
+  try {
+    const res = await axios.get(`${apiURL}/user/get-all-${role}`);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
 
 const setRole = async ( uid, role) => {
   try {
@@ -219,6 +227,7 @@ export {
   getUser,
   forgotPassword,
   getAllUser,
+  getuserWithRole,
   setRole,
   lockUser,
   createJobRes,

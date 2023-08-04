@@ -11,6 +11,7 @@ import {
   loginService,
   loginByTokenService,
   getUserService,
+  getUserWithRoleService,
   getAllUserService,
   updateUserService,
   verifyUserService,
@@ -153,6 +154,30 @@ const getAllUser = async (_req: Request, res: Response) => {
     res.status(200).json({ statusCode: "400", message: `${error}` });
   }
 };
+const getAllLeader = async (_req: Request, res: Response) => {
+  try {
+    const response: response = await getUserWithRoleService("leader");
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+const getAllMem = async (_req: Request, res: Response) => {
+  try {
+    const response: response = await getUserWithRoleService("user");
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+const getAllPM = async (_req: Request, res: Response) => {
+  try {
+    const response: response = await getUserWithRoleService("project");
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -263,6 +288,9 @@ export default {
   loginByToken,
   getUser,
   getAllUser,
+  getAllLeader,
+  getAllMem,
+  getAllPM,
   updateUser,
   sendMail,
   verifyEmail,

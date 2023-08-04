@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState, useContext } from "react";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
-import { getAllUser, lockUser, createJobRes } from "../../api/apiUser";
+import { getuserWithRole, getAllJob, createJobRes } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
 import "./home.css";
 
@@ -67,20 +67,47 @@ const Home = () => {
   const [dataUser, setDataUser] = useState([]);
   const [value, setValue] = useState("");
   const [inputValue, setInputValue] = useState("");
-
+  const [jobList, setJobList] = useState([])
+  const [jobDone, setjobDone] = useState([])
+  const [jobNotDone, setjobNotDone] = useState([])
   const [tvalue, settValue] = React.useState(0);
 
   const handleChangeTab = (event, newValue) => {
     settValue(newValue);
+    console.log("joblist", jobList)
+    console.log("done", jobDone);
+    console.log("notdone", jobNotDone);
   };
 
-  const fetchData = async () => {
-    const res = await getAllUser();
-    if (res.statusCode === "200") {
-      setDataUser(res.data);
-    }
-  };
+
   useEffect(() => {
+
+    const fetchData = async () => {
+
+      const res = await getuserWithRole("leader");
+      if (res.statusCode === "200") {
+        setDataUser(res.data);
+      }
+
+
+      const ress = await getAllJob(user.id);
+      if (ress.statusCode === "200") {
+        setJobList(ress.data);
+      }
+      const jobDoneTmp = [];
+      const jobnotDoneTmp = [];
+      ress.data.map((c) => {
+        const check = c.jobdone
+        if (check == false) {
+          jobnotDoneTmp.push(c);
+        }
+        else
+          jobDoneTmp.push(c)
+      });
+      setjobDone(jobDoneTmp);
+      setjobNotDone(jobnotDoneTmp)
+
+    };
     fetchData();
   }, []);
   const filteredData = dataUser.filter(item => item.lock === false);
@@ -94,9 +121,9 @@ const Home = () => {
 
   const handleCreateJob = async (e) => {
     e.preventDefault();
-    let res = await createJobRes(jobId,jobname,jobnote,value.id,user.id);
+    let res = await createJobRes(jobId, jobname, jobnote, value.id, user.id);
     console.log("new user ", res);
-    
+
     setNotifi([res.message]);
   };
 
@@ -119,137 +146,136 @@ const Home = () => {
               aria-label="Vertical tabs example"
 
               // sx={{ borderRight: 1, borderColor: 'divider', width: "30%"}}
-           
-              sx={{ 
-                borderRight: 1, 
-                borderColor: 'divider', 
+
+              sx={{
+                borderRight: 1,
+                borderColor: 'divider',
                 width: "30%",
-                position: 'relative', 
+                position: 'relative',
                 "& .tabPick": {
                   fontSize: 16, // Thay đổi cỡ chữ tại đây
                   // color: 'blue', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
                   '&.Mui-selected': {
                     borderRadius: '15px',
                     background: '#1987DE',
-                  color: 'white', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
-                     // Thay đổi mã màu (#00ff00) thành màu nền bạn muốn khi tab được chọn
+                    color: 'white', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                    // Thay đổi mã màu (#00ff00) thành màu nền bạn muốn khi tab được chọn
                   },
                 },
               }}
-           >
-              <Tab className="tabPick" label="PROJECT" />
-              <Tab className="tabPick" label="LỊCH" />
-              <Tab className="tabPick" label="TASK" />
-              <Tab className="tabPick" label="DEADLINE" />
-              <Tab className="tabPick" label="TASKEND" />
+            >
+              <Tab className="tabPick" label="create" />
+              <Tab className="tabPick" label="working" />
+              <Tab className="tabPick" label="done" />
+              <Tab className="tabPick" label="leader" />
+
 
 
             </Tabs>
             <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
 
             <TabPanel tvalue={tvalue} index={0}>
-              
+              <form
+                className="loginBox"
+                onSubmit={handleCreateJob}
+                style={{ height: "400px", width: "500px", }}
+              >
+                <h1 style={{ textAlign: "center" }}> tạo project </h1>
+                <TextField
+                  required
+                  type="text"
+                  id="outlined-basic"
+                  label="project id"
+                  variant="outlined"
+                  value={jobId}
+                  onChange={(e) => {
+                    setJobId(e.target.value);
+                  }}
+                  sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: '20px' }}
+                />
+                <TextField
+                  required
+                  type="text"
+                  id="outlined-basic"
+                  label="Tên project"
+                  variant="outlined"
+                  value={jobname}
+                  onChange={(e) => {
+                    setJobName(e.target.value);
+                  }}
+                  sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: '20px' }}
+                />
+
+
+
+                <div>
+                  {/* <div>{`value: ${value ? `'${value.id}` : 'null'}`}</div>
+              <div>{`inputValue: '${inputValue}'`}</div>
+              <br /> */}
+                  <Autocomplete
+                    value={value}
+                    onChange={(event, newValue) => {
+                      setValue(newValue);
+                    }}
+                    inputValue={inputValue}
+                    onInputChange={(event, newInputValue) => {
+                      setInputValue(newInputValue);
+                    }}
+                    sx={{ width: '80%', marginLeft: 'auto', marginRight: 'auto' }}
+                    id="controllable-states-demo"
+                    options={options}
+                    getOptionLabel={(option) => option.ten}
+                    renderOption={(props, option) => (
+                      <li {...props}>
+                        {option.ten} - {option.id}
+                      </li>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} required label="leader" sx={{ marginTop: '20px' }} />
+                    )}
+                  />
+                </div>
+
+                <TextField
+                  required
+                  type="text"
+                  id="outlined-basic"
+                  label="project note"
+                  variant="outlined"
+                  multiline
+                  rows={5} // Số dòng mặc định
+                  maxRows={10} // Giới hạn số dòng tối đa
+                  value={jobnote}
+                  onChange={(e) => {
+                    setJobnote(e.target.value);
+                  }}
+
+                  sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: "20px" }}
+                />
+
+
+                <button
+                  className="loginButton"
+                  type="submit"
+                  style={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: '20px' }}
+                >
+                  Tạo project
+                </button>
+
+              </form>
             </TabPanel>
             <TabPanel tvalue={tvalue} index={1}>
               Item Two
             </TabPanel>
             <TabPanel tvalue={tvalue} index={2}>
               Item Three
+            </TabPanel> 
+            <TabPanel tvalue={tvalue} index={3}>
+              Item Three
             </TabPanel>
 
           </Box>
 
-        </div>
-        <div className="right_home"
-          style={{ border: '3px solid #F5F5F5' }}>
-          <form
-            className="loginBox"
-            onSubmit={handleCreateJob}
-            style={{ height: "400px", width: "500px", }}
-          >
-            <h1 style={{ textAlign: "center" }}> tạo project </h1>
-            <TextField
-              required
-              type="text"
-              id="outlined-basic"
-              label="project id"
-              variant="outlined"
-              value={jobId}
-              onChange={(e) => {
-                setJobId(e.target.value);
-              }}
-              sx={{ width: "80%", marginLeft: "auto", marginRight: "auto",marginTop:'20px' }}
-            />
-            <TextField
-              required
-              type="text"
-              id="outlined-basic"
-              label="Tên project"
-              variant="outlined"
-              value={jobname}
-              onChange={(e) => {
-                setJobName(e.target.value);
-              }}
-              sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" ,marginTop:'20px'}}
-            />
-
-
-
-            <div>
-              {/* <div>{`value: ${value ? `'${value.id}` : 'null'}`}</div>
-              <div>{`inputValue: '${inputValue}'`}</div>
-              <br /> */}
-              <Autocomplete
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                  setInputValue(newInputValue);
-                }}
-                sx={{ width: '80%', marginLeft: 'auto', marginRight: 'auto' }}
-                id="controllable-states-demo"
-                options={options}
-                getOptionLabel={(option) => option.ten}
-                renderOption={(props, option) => (
-                  <li {...props}>
-                    {option.ten} - {option.id}
-                  </li>
-                )}
-                renderInput={(params) => (
-                  <TextField {...params} required label="leader" sx={{marginTop:'20px'}} />
-                )}
-              />
-            </div>
-
-            <TextField
-              required
-              type="text"
-              id="outlined-basic"
-              label="project note"
-              variant="outlined"
-              multiline
-              rows={5} // Số dòng mặc định
-              maxRows={10} // Giới hạn số dòng tối đa
-              value={jobnote}
-              onChange={(e) => {
-                setJobnote(e.target.value);
-              }}
-
-              sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: "20px" }}
-            />
-
-
-            <button
-              className="loginButton"
-              type="submit"
-              style={{ width: "80%", marginLeft: "auto", marginRight: "auto" ,marginTop:'20px'}}
-            >
-              Tạo project
-            </button>
-
-          </form>
         </div>
       </div>
 

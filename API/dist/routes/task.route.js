@@ -14,5 +14,6 @@ router.get("/get-task-by-time/:userId", task_controller_1.default.getTaskByTime)
 router.get("/get-task-by-job/:userId", task_controller_1.default.getTaskByJob);
 router.post("/create-task", task_controller_1.default.createTask);
 router.put("/done-task", task_controller_1.default.doneTask);
+router.put("/check-task", task_controller_1.default.checkTask);
 exports.default = router;
 //# sourceMappingURL=task.route.js.map

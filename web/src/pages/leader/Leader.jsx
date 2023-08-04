@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState, useContext } from "react";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
-import { getAllUser, getAllJob, createTaskRes, getTaskByUser } from "../../api/apiUser";
+import { getuserWithRole, getAllJob, createTaskRes, getTaskByUser } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
 import Picker from "../tabAndJobPick/Picker";
 import "./leader.css";
@@ -62,7 +62,7 @@ TabPanel.propTypes = {
 
 
 
-const Home = () => {
+const Leader = () => {
   const [textSearch, setTextSearch] = useState("");
   const { setNotifi } = useContext(NotifiContext);
   const { user } = useContext(UserContext);
@@ -82,32 +82,53 @@ const Home = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [taskList, setTaskList] = useState([])
 
-  const [tvalue, settValue] = React.useState(0);
+  const [tvalue, settValue] = useState(0);
 
   const [taskidShow, setTaskIdShow] = useState('')
-  const handleChangeTab = (event, newValue) => {
+  const handleChangeTab = async (event, newValue) => {
+    setTaskList([]);
+
+    const res = await getTaskByUser(user?.id);
+
+    const searchConversation = [];
+    res.data.map((c) => {
+      searchConversation.push(c);
+    }
+    );
+
     settValue(newValue);
-    console.log(newValue)
+    if (newValue == 1) {
+      const today = new Date().toISOString().split('T')[0];
+      const datafil = searchConversation.filter(item => item.end === today);
+
+      setTaskList(datafil);
+    } else if(newValue==2)
+    {
+      setTaskList(searchConversation);
+
+    }
+
   };
   const handleTaskPick = (value) => {
-
+    
     console.log('ahehe', taskidShow)
   };
 
 
-  const fetchData = async () => {
-    const res = await getAllUser();
-    if (res.statusCode === "200") {
-      setDataUser(res.data);
-    }
-
-    const ress = await getAllJob(user.id);
-    if (ress.statusCode === "200") {
-      setDatajob(ress.data);
-    }
-
-  };
+  
   useEffect(() => {
+    const fetchData = async () => {
+      const res = await getuserWithRole("member");
+      if (res.statusCode === "200") {
+        setDataUser(res.data);
+      }
+  
+      const ress = await getAllJob(user.id);
+      if (ress.statusCode === "200") {
+        setDatajob(ress.data);
+      }
+  
+    };
     fetchData();
   }, []);
   const filteredData = dataUser.filter(item => item.lock === false);
@@ -200,7 +221,7 @@ const Home = () => {
     );
 
     // Lọc ra các phần tử có thuộc tính "end" bằng giá trị của biến "date"
-    const filteredData =  searchConversation.filter(item => item.end === dateObj);
+    const filteredData = searchConversation.filter(item => item.end === dateObj);
     setTaskList(filteredData)
   }
   const handleSelect = async (event, value) => {
@@ -230,10 +251,34 @@ const Home = () => {
     }
     if (value.val === 3) {
       // theo tên a-> z
+      setTaskList([])
+      searchConversation.sort((a, b) => {
+        if (a.taskname < b.taskname) {
+          return 1;
+        }
+        if (a.taskname > b.taskname) {
+          return -1;
+        }
+        return 0;
+      });
+      console.log("done sort", searchConversation)
+
       setTaskList(searchConversation);
     }
     if (value.val === 4) {
       // theo tên z-> a
+      setTaskList([])
+      searchConversation.sort((a, b) => {
+        if (a.taskname < b.taskname) {
+          return -1;
+        }
+        if (a.taskname > b.taskname) {
+          return 1;
+        }
+        return 0;
+      });
+      console.log("done sort", searchConversation)
+
       setTaskList(searchConversation);
     }
     if (value.val === 5) {
@@ -282,49 +327,47 @@ const Home = () => {
       <Topbar setConversations={null} />
       <div className="homee">
 
-        <div className="left_home"
-          style={{ border: '3px solid #F5F5F5' }}>
-          <Box
-            sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%', }}
-          >
-            <Tabs
-              orientation="vertical"
-              variant="scrollable"
-              value={tvalue}
-              onChange={handleChangeTab}
-              aria-label="Vertical tabs example"
+        <Box
+          sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%', }}
+        >
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={tvalue}
+            onChange={handleChangeTab}
+            aria-label="Vertical tabs example"
 
-              // sx={{ borderRight: 1, borderColor: 'divider', width: "30%"}}
+            // sx={{ borderRight: 1, borderColor: 'divider', width: "30%"}}
 
-              sx={{
-                borderRight: 1,
-                borderColor: 'divider',
-                width: "30%",
-                "& .tabPick": {
-                  fontSize: 16, // Thay đổi cỡ chữ tại đây
-                  // color: 'blue', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
-                  '&.Mui-selected': {
-                    borderRadius: '15px',
-                    background: '#1987DE',
-                    color: 'white', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
-                    // Thay đổi mã màu (#00ff00) thành màu nền bạn muốn khi tab được chọn
-                  },
+            sx={{
+              borderRight: 1,
+              borderColor: 'divider',
+              width: "30vw",
+              "& .tabPick": {
+                fontSize: 16, // Thay đổi cỡ chữ tại đây
+                // color: 'blue', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                '&.Mui-selected': {
+                  borderRadius: '15px',
+                  background: '#1987DE',
+                  color: 'white', // Thay đổi mã màu (#ff0000) thành màu bạn muốn
+                  // Thay đổi mã màu (#00ff00) thành màu nền bạn muốn khi tab được chọn
                 },
-              }}
-            >
-              <Tab className="tabPick" label="tạo task" />
-              <Tab className="tabPick" label="LỊCH" />
-              <Tab className="tabPick" label="DANH SÁCH TASK" />
-              <Tab className="tabPick" label="DEADLINE HÔM NAY" />
-              <Tab className="tabPick" label="TASK MỚI UPDATE" />
+              },
+            }}
+          >
+            <Tab className="tabPick" label="tạo task" />
+            <Tab className="tabPick" label="LỊCH" />
+            <Tab className="tabPick" label="DANH SÁCH TASK" />
 
 
-            </Tabs>
-            <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
 
-            <TabPanel tvalue={tvalue} index={0}>
+          </Tabs>
+          <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
+
+          <TabPanel tvalue={tvalue} index={0}>
 
 
+            <div className="LichHome">
               <form
                 className="loginBox"
                 onSubmit={handleLogin}
@@ -446,65 +489,91 @@ const Home = () => {
                 </button>
 
               </form>
-            </TabPanel>
-            <TabPanel tvalue={tvalue} index={1}>
-              LỊCH
-            </TabPanel>
-            <TabPanel tvalue={tvalue} index={2}>
+            </div>
+          </TabPanel>
+          <TabPanel tvalue={tvalue} index={1}>
+            <div className="LichHome">
+              <div className="left_homee">
+                {taskList.map((c, index) => (
+                  <div
+                    onClick={() => {
+                      handleTaskPick(c);
+                      console.log(c, user) // 
+                      setTaskIdShow(c.id)
+                    }}
+                    key={index}
+                  >
+                    <Picker conversation={c} />
+                  </div>
+                ))}
+              </div>
+              <div className="right_homee" >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar
+                    onChange={handelDate}
+                  />
+                </LocalizationProvider>
+              </div>
+            </div>
+          </TabPanel>
+          <TabPanel tvalue={tvalue} index={2}>
+            <div className="LichHome">
+              <div className="left_homee">
 
-              <div className="taskList" sx={{ width: "100%" }} >
-                <TextField
-                  fullWidth
-                  id="standard-basic"
-                  label="Tìm kiếm"
-                  variant="standard"
-                  value={textSearch}
-                  onChange={(e) => {
-                    setTextSearch(e.target.value);
-                  }}
-                />
+                <div className="taskList" sx={{ width: "100%" }} >
+                  <TextField
+                    fullWidth
+                    id="standard-basic"
+                    label="Tìm kiếm"
+                    variant="standard"
+                    value={textSearch}
+                    onChange={(e) => {
+                      setTextSearch(e.target.value);
+                    }}
+                  />
 
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={tasklistt}
-                  sx={{ width: 300 }}
-                  getOptionLabel={(option) => option.label}
-                  renderInput={(params) => <TextField {...params} label="sắp xếp" />}
-                  onChange={handleSelect}
-                />
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={tasklistt}
+                    sx={{ width: 300 }}
+                    getOptionLabel={(option) => option.label}
+                    renderInput={(params) => <TextField {...params} label="sắp xếp" />}
+                    onChange={handleSelect}
+                  />
+
+                </div>
+
+                {taskList.map((c, index) => (
+                  <div
+                    onClick={() => {
+                      handleTaskPick(c);
+                      setTaskIdShow(c.id)
+                    }}
+                    key={index}
+                  >
+                    <Picker conversation={c} />
+                  </div>
+                ))}
 
               </div>
+              <div className="right_homee">
+                    <span>
+                      {/* {taskshow.taskName} */}kkkkk
+                    </span>
+              </div>
+            </div>
 
-              {taskList.map((c, index) => (
-                <div
-                  onClick={() => {
-                    handleTaskPick(c);
-                    console.log(c, user) // 
-                    setTaskIdShow(c.id)
-                  }}
-                  key={index}
-                >
-                  <Picker conversation={c} />
-                </div>
-              ))}
+          </TabPanel>
+     
+        </Box>
 
 
-            </TabPanel>
-          </Box>
 
-        </div>
-        <div className="right_home" style={{ border: '3px solid #F5F5F5' }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar
-              onChange={handelDate}
-            />
-          </LocalizationProvider>
-        </div>
       </div>
 
     </>
   );
 };
 
-export default Home;
+export default Leader;

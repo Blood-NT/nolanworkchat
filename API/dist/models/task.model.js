@@ -7,9 +7,9 @@ exports.taskModel = void 0;
 const sequelize_1 = require("sequelize");
 const connectDB_1 = __importDefault(require("../config/connectDB"));
 exports.taskModel = connectDB_1.default.define("task", {
-    id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id: { type: sequelize_1.DataTypes.STRING(500), primaryKey: true },
     taskname: sequelize_1.DataTypes.STRING(500),
-    jobid: sequelize_1.DataTypes.INTEGER,
+    jobid: sequelize_1.DataTypes.STRING(500),
     leaderid: sequelize_1.DataTypes.STRING(20),
     memid: sequelize_1.DataTypes.STRING(20),
     tasknote: sequelize_1.DataTypes.STRING(500),

@@ -83,10 +83,22 @@ const doneTask = async (req, res) => {
         res.status(200).json({ statusCode: "400", message: `${error}` });
     }
 };
+const checkTask = async (req, res) => {
+    try {
+        const idTask = req.body.idTask;
+        const uID = req.body.uId;
+        const response = await (0, task_service_1.checkTaskServices)(idTask, uID);
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
 exports.default = {
     createTask,
     getTask,
     doneTask,
+    checkTask,
     getTaskByJob,
     getTaskByDeadline,
     getTaskByTime,

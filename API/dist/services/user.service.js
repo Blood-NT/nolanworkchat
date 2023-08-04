@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lockUserService = exports.changePasswordUserService = exports.verifyUserService = exports.updateUserService = exports.loginByTokenService = exports.loginService = exports.getAllUserService = exports.getUserService = exports.createUserService = void 0;
+exports.setRoleService = exports.changepassService = exports.lockUserService = exports.changePasswordUserService = exports.verifyUserService = exports.updateUserService = exports.loginByTokenService = exports.loginService = exports.getUserWithRoleService = exports.getAllUserService = exports.getUserService = exports.createUserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const sequelize_1 = require("sequelize");
@@ -73,7 +73,7 @@ const getAllUserService = async () => {
         where: {
             verify: true,
         },
-        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock"],
+        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock", "role"],
         order: [["id", "ASC"]],
     });
     await (0, modern_async_1.map)(foundUser, (data, index) => {
@@ -90,6 +90,29 @@ const getAllUserService = async () => {
     };
 };
 exports.getAllUserService = getAllUserService;
+const getUserWithRoleService = async (role) => {
+    let foundUser = await user_model_1.userModel.findAll({
+        where: {
+            role: role,
+            verify: true,
+        },
+        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock", "role"],
+        order: [["id", "ASC"]],
+    });
+    await (0, modern_async_1.map)(foundUser, (data, index) => {
+        const found = index_1.users.find((u) => u.id === data.id);
+        foundUser[index].dataValues.status = false;
+        if (found) {
+            foundUser[index].dataValues.status = true;
+        }
+    });
+    return {
+        statusCode: "200",
+        message: "lấy người dùng thành công",
+        data: foundUser,
+    };
+};
+exports.getUserWithRoleService = getUserWithRoleService;
 const getToken = (id, role, type) => {
     let key = process.env.JWT_SECRET || "";
     const payload = {
@@ -127,6 +150,18 @@ const loginByTokenService = async (token) => {
     }
 };
 exports.loginByTokenService = loginByTokenService;
+const changepassService = async (email, password) => {
+    let foundUser = await getUserByEmail(email);
+    if (!foundUser) {
+        return { statusCode: "400", message: "không tìm thấy người dùng" };
+    }
+    const checkPass = bcrypt_1.default.compareSync(password, foundUser.password);
+    if (checkPass === false) {
+        return { statusCode: "400", message: "mật khẩu không đúng" };
+    }
+    return { statusCode: "200", message: "thay đổi thành công" };
+};
+exports.changepassService = changepassService;
 const loginService = async (email, password) => {
     let foundUser = await getUserByEmail(email);
     if (!foundUser) {
@@ -232,4 +267,14 @@ const lockUserService = async (email, lock) => {
     };
 };
 exports.lockUserService = lockUserService;
+const setRoleService = async (uid, role) => {
+    await user_model_1.userModel.update({
+        role: role,
+    }, { where: { id: uid } });
+    return {
+        statusCode: "200",
+        message: "cập nhật thành công ",
+    };
+};
+exports.setRoleService = setRoleService;
 //# sourceMappingURL=user.service.js.map

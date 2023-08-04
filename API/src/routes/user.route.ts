@@ -15,6 +15,10 @@ router.get("/verified", userController.verified);
 
 router.get("/get-all-user", userController.getAllUser);
 
+router.get("/get-all-leader", userController.getAllLeader);
+router.get("/get-all-member", userController.getAllMem);
+router.get("/get-all-project", userController.getAllPM);
+
 router.get("/get-user", userController.getUser);
 
 router.post("/create-user", userController.createUser);

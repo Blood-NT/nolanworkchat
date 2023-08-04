@@ -13,7 +13,7 @@ const createtaskMessaes = async (req, res) => {
 };
 const getTaskMessagesInTask = async (req, res) => {
     try {
-        const groupId = Number(req.params.groupId);
+        const groupId = req.params.groupId;
         const response = await (0, taskmessages_service_1.getTaskMessagesService)(groupId);
         res.status(200).json(response);
     }

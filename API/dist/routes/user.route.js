@@ -11,13 +11,18 @@ router.get("/verify/:email/:uniqueString", user_controller_1.default.verifyEmail
 router.get("/verify-password/:email/:uniqueString", user_controller_1.default.verifyChangePassword);
 router.get("/verified", user_controller_1.default.verified);
 router.get("/get-all-user", user_controller_1.default.getAllUser);
+router.get("/get-all-leader", user_controller_1.default.getAllLeader);
+router.get("/get-all-member", user_controller_1.default.getAllMem);
+router.get("/get-all-project", user_controller_1.default.getAllPM);
 router.get("/get-user", user_controller_1.default.getUser);
 router.post("/create-user", user_controller_1.default.createUser);
 router.post("/forgot-password", user_controller_1.default.createForgotPassword);
+router.post("/change-password", user_controller_1.default.changePassword);
 router.post("/login", user_controller_1.default.login);
 router.post("/login-token", user_controller_1.default.loginByToken);
 router.put("/update-user", authToken_middlewares_1.authUser, user_controller_1.default.updateUser);
 router.post("/lock-user", authToken_middlewares_1.authUser, user_controller_1.default.lockUser);
+router.post("/set-role", authToken_middlewares_1.authUser, user_controller_1.default.setRole);
 router.post("/send-email", user_controller_1.default.sendMail);
 exports.default = router;
 //# sourceMappingURL=user.route.js.map

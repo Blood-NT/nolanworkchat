@@ -47,7 +47,7 @@ const getUser = (id) => {
 };
 io.on("connection", (socket) => {
     socket.on("addUser", ({ id, avatar }) => {
-        console.log("add user " + id + " - ", socket.id);
+        logging_1.default.debug("add user " + id + " - ", socket.id);
         if (addUser(id, avatar, socket.id)) {
             io.emit("getUsers", exports.users);
         }
@@ -78,6 +78,6 @@ io.on("connection", (socket) => {
     });
 });
 httpServer.listen(port, () => {
-    logging_1.default.info(NAME_SPACE, `Server is rrrrunning http://localhost:${port}`);
+    logging_1.default.info(NAME_SPACE, `Server is heherunning http://localhost:${port}`);
 });
 //# sourceMappingURL=index.js.map

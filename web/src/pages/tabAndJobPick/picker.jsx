@@ -2,9 +2,9 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 
-const Picker = ({ conversation }) => {
+const Picker = ({ conversation, checkDone }) => {
   const [task, setUser] = useState(conversation);
-
+const[checkdonen, setcheck]=useState(checkDone);
 
   return (
     <>

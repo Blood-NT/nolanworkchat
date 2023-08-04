@@ -52,6 +52,29 @@ const createForgotPassword = async (req, res) => {
         res.status(200).json({ statusCode: "400", message: `${error}` });
     }
 };
+const changePassword = async (req, res) => {
+    try {
+        const { email, oldPass, newPass } = req.body;
+        const response = await (0, user_service_1.changepassService)(email, oldPass);
+        if (response.statusCode === "200") {
+            const uniqueString = (0, uuid_1.v4)();
+            await (0, sendEmail_1.sendVerifiForgotPassword)(email, uniqueString);
+            const newww = {
+                email: email,
+                uniqueString: uniqueString,
+                password: newPass,
+            };
+            await (0, forgotPassword_service_1.createVerifyPasswordService)(newww);
+            res.status(200).json({ statusCode: "200", message: "Tạo thành công" });
+        }
+        if (response.message == "mật khẩu không đúng") {
+            res.status(200).json({ statusCode: "400", message: "mật khẩu không đúng" });
+        }
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
 const updateUser = async (req, res) => {
     try {
         const newUser = req.body;
@@ -72,6 +95,16 @@ const lockUser = async (req, res) => {
         res.status(200).json({ statusCode: "400", message: `${error}` });
     }
 };
+const setRole = async (req, res) => {
+    try {
+        const { uid, role } = req.body;
+        const response = await (0, user_service_1.setRoleService)(uid, role);
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
 const getUser = async (req, res) => {
     try {
         const id = req.query.id || "";
@@ -86,6 +119,33 @@ const getUser = async (req, res) => {
 const getAllUser = async (_req, res) => {
     try {
         const response = await (0, user_service_1.getAllUserService)();
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
+const getAllLeader = async (_req, res) => {
+    try {
+        const response = await (0, user_service_1.getUserWithRoleService)("leader");
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
+const getAllMem = async (_req, res) => {
+    try {
+        const response = await (0, user_service_1.getUserWithRoleService)("user");
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
+const getAllPM = async (_req, res) => {
+    try {
+        const response = await (0, user_service_1.getUserWithRoleService)("project");
         res.status(200).json(response);
     }
     catch (error) {
@@ -193,12 +253,17 @@ exports.default = {
     loginByToken,
     getUser,
     getAllUser,
+    getAllLeader,
+    getAllMem,
+    getAllPM,
     updateUser,
     sendMail,
     verifyEmail,
     verified,
+    changePassword,
     createForgotPassword,
     verifyChangePassword,
     lockUser,
+    setRole
 };
 //# sourceMappingURL=user.controller.js.map

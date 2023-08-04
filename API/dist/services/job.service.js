@@ -4,7 +4,15 @@ exports.getJobByTimeService = exports.getJobByUserService = exports.createJobSer
 const sequelize_1 = require("sequelize");
 const job_model_1 = require("../models/job.model");
 const createJobService = async (newJob) => {
+    const foundUser = await job_model_1.jobModel.findOne({
+        where: { id: newJob.id }
+    });
+    if (foundUser) {
+        return { statusCode: "400", message: "idjob đã tồn tại" };
+    }
     newJob.createat = new Date();
+    newJob.updateat = new Date();
+    newJob.jobdone = false;
     const job = await job_model_1.jobModel.create(newJob);
     return {
         statusCode: "200",

@@ -1,22 +1,15 @@
 .homee{
-    justify-content: space-between;
-    display: flex;
+
     margin: 20px 50px 0px 50px;
-    border: 3px solid red;
-    border-radius: 15px;
     height: 90vh;
 
 }
-.left_home,.right_home{
-    margin: 20px 0px 20px 0px;
-}
-.left_home{
+.LichHome{
     width: 70vw;
-}
-.right_home{
     display: flex;
-    justify-content: center;
-    align-items: center;
+}
+.left_homee{
+    width: 70% !important;
 }
 .tabPick:hover{
     border: 1px solid #1987DE;
@@ -29,6 +22,10 @@
 
 [role="tabpanel"] {
     width: 100% !important;
+}
+.MuiBox-root{
+    width: 100% !important;
+
 }
 /* 
 .MuiTabs-root .Mui-selected {

@@ -91,6 +91,29 @@ const getAllUserService = async () => {
   };
 };
 
+const getUserWithRoleService = async (role:string) => {
+  let foundUser: any[] = await userModel.findAll({
+    where: {
+      role: role,
+      verify: true,
+    },
+    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock","role"],
+    order: [["id", "ASC"]],
+  });
+  await map(foundUser, (data, index) => {
+    const found = users.find((u) => u.id === data.id);
+    foundUser[index].dataValues.status = false;
+    if (found) {
+      foundUser[index].dataValues.status = true;
+    }
+  });
+  return {
+    statusCode: "200",
+    message: "lấy người dùng thành công",
+    data: foundUser,
+  };
+};
+
 const getToken = (
   id: string,
   role: string | undefined,
@@ -299,6 +322,7 @@ export {
   createUserService,
   getUserService,
   getAllUserService,
+  getUserWithRoleService,
   loginService,
   loginByTokenService,
   updateUserService,
