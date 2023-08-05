@@ -2,9 +2,9 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 
-const Picker = ({ conversation, checkDone }) => {
+const Picker = ({ conversation }) => {
   const [task, setUser] = useState(conversation);
-const[checkdonen, setcheck]=useState(checkDone);
+// const[checkdonen, setcheck]=useState(checkDone);
 
   return (
     <>
@@ -19,7 +19,7 @@ const[checkdonen, setcheck]=useState(checkDone);
             }
             alt=""
           /> */}
-          <span className="conversationName">{task?.taskname}</span>
+          <span className="conversationName">{task?.id}</span>
         </div>
       )}
     </>

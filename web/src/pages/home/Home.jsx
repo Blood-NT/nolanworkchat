@@ -70,20 +70,26 @@ const Home = () => {
   const [jobList, setJobList] = useState([])
   const [jobDone, setjobDone] = useState([])
   const [jobNotDone, setjobNotDone] = useState([])
-  const [tvalue, settValue] = React.useState(0);
+  const [tvalue, settValue] = useState(0);
+
+
+  const [jobPick, setJobPick] = useState([]);
+  const [datePick, setDatePick] = useState([]);
+
+  const[leadPick,setLeadPick]=useState("");
+
 
   const handleChangeTab = (event, newValue) => {
     settValue(newValue);
-    console.log("joblist", jobList)
-    console.log("done", jobDone);
-    console.log("notdone", jobNotDone);
-  };
+    console.log("vallll",tvalue);
+    setJobPick([])
+    setLeadPick([])   
+     };
 
 
   useEffect(() => {
 
     const fetchData = async () => {
-
       const res = await getuserWithRole("leader");
       if (res.statusCode === "200") {
         setDataUser(res.data);
@@ -131,9 +137,9 @@ const Home = () => {
   return (
     <>
       <Topbar setConversations={null} />
-      <div className="homee">
+      <div className="jobHome">
 
-        <div className="left_home"
+        <div className="leftJob"
           style={{ border: '3px solid #F5F5F5' }}>
           <Box
             sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%', }}
@@ -178,7 +184,8 @@ const Home = () => {
               <form
                 className="loginBox"
                 onSubmit={handleCreateJob}
-                style={{ height: "400px", width: "500px", }}
+                
+                style={{ height: "90%", width: "100%" }}
               >
                 <h1 style={{ textAlign: "center" }}> tạo project </h1>
                 <TextField
@@ -265,17 +272,66 @@ const Home = () => {
               </form>
             </TabPanel>
             <TabPanel tvalue={tvalue} index={1}>
-              Item Two
+
+              {jobNotDone.map((c, index) => (
+
+                <div className="conversation"
+                onClick={() => {
+                  
+                  setJobPick(c)      
+                  console.log("jobPick", c);           
+                }}
+                  key={index}
+                >
+                  <span>{c.jobname}</span>
+                </div>
+              ))
+              }
+
+
             </TabPanel>
             <TabPanel tvalue={tvalue} index={2}>
-              Item Three
-            </TabPanel> 
+              {jobDone.map((c, index) => (
+
+                <div className="conversation"
+
+                onClick={() => {
+                  
+                  setJobPick(c)
+                  console.log("jobpick",c)
+                  
+                }}
+                  key={index}
+                >
+                  <span>{c.jobname}</span>
+                </div>
+              ))
+              }
+            </TabPanel>
             <TabPanel tvalue={tvalue} index={3}>
-              Item Three
+              {filteredData.map((c, index) => (
+
+                <div className="conversation"
+                onClick={() => {
+                  
+                  setLeadPick(c)
+                  console.log("picklead",leadPick)
+                  
+                }}
+                  key={index}
+                >
+                  <span>{c.id}</span>
+                </div>
+              ))
+              }
             </TabPanel>
 
           </Box>
 
+        </div>
+        <div className="rightJob">
+          {
+            tvalue==0? (<span>ddoongf hoof cho vui ^^</span>):( tvalue==1?(<span>{jobPick.jobname}</span>): (tvalue==2?(<span>{jobPick.jobname}</span>): (<span>{leadPick.id}</span>) )   )      }
         </div>
       </div>
 

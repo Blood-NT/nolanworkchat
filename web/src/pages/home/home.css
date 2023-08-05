@@ -1,16 +1,15 @@
-.homee{
+.jobHome{
     justify-content: space-between;
     display: flex;
-    padding: 0px 50px 0px 50px;
+    padding: 50px 50px 0px 50px;
     height: 80vh;
 }
-.left_home,.right_home{
-    width: 50vw;
+
+.leftJob,.rightJob{
+    width: 50%;
 }
-.right_home{
-    display: flex;
-    justify-content: center;
-}
+
+
 .tabPick:hover{
     border: 1px solid #1987DE;
     border-radius: 15pc;
