@@ -81,4 +81,25 @@ const deleteGroup = async (sender, receive) => {
   }
 };
 
-export { createGroup, getTaskByUser, getGroup, deleteGroup };
+const checkTask = async (id,memid, ischeck) => {
+  try {
+    const fetchData = async () => {
+      const body = {
+        id,
+       memid,
+         ischeck,
+      };
+      const res = await axios.put(
+        `${apiURL}/task/check-task`,body
+      );
+      return res.data;
+    };
+    let data = await fetchData();
+    return data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
+
+export { createGroup, getTaskByUser, getGroup, deleteGroup,checkTask };

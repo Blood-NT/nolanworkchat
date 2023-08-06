@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import { taskModel } from "../models/task.model";
 import { task } from "../interfaces/task.interface";
 import response from "../interfaces/response.interface";
+import logging from "../config/logging";
 
 const createTaskService = async (newTask: task): Promise<response> => {
   const foundUser: task | null = await taskModel.findOne({
@@ -15,7 +16,7 @@ const createTaskService = async (newTask: task): Promise<response> => {
   newTask.createat = new Date();
 
   newTask.updatedAt = new Date();
-  newTask.isdone = false;
+  newTask.isdone = 0;
   newTask.ischeck = false;
   const group: task = await taskModel.create(newTask);
   return {
@@ -29,8 +30,7 @@ const createTaskService = async (newTask: task): Promise<response> => {
 const getTaskByDeadlineService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ leaderid: userId }, { memid: userId }],
-      isdone: false,// thay bằng done
+      [Op.or]: [{ leaderid: userId }, { memid: userId }]
     },
     order: [["end", "DESC"]],
   });
@@ -45,8 +45,7 @@ const getTaskByDeadlineService = async (userId: string): Promise<response> => {
 const getTaskByJobService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ leaderid: userId }, { memid: userId }],
-      isdone: false,// thay bằng done
+      [Op.or]: [{ leaderid: userId }, { memid: userId }]
     },
     order: [["jobid", "DESC"]],
   });
@@ -61,8 +60,7 @@ const getTaskByJobService = async (userId: string): Promise<response> => {
 const getTaskByTimeService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ leaderid: userId }, { memid: userId }],
-      isdone: false,
+      [Op.or]: [{ leaderid: userId }, { memid: userId }]
     },
     order: [["updatedAt", "DESC"]],
   });
@@ -77,8 +75,7 @@ const getTaskByTimeService = async (userId: string): Promise<response> => {
 const getTaskService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ leaderid: userId }, { memid: userId }],
-      isdone: false,
+      [Op.or]: [{ leaderid: userId }, { memid: userId }]
     },
     order: [["updatedAt", "DESC"]],
   });
@@ -92,8 +89,7 @@ const getTaskService = async (userId: string): Promise<response> => {
 const getAllTaskByLeaderService = async (userId: string): Promise<response> => {
   const foundGroup: task[] = await taskModel.findAll({
     where: {
-      [Op.or]: [{ leaderid: userId }, { memid: userId }],
-      isdone: false,
+      [Op.or]: [{ leaderid: userId }, { memid: userId }]
     },
     order: [["leaderid", "DESC"]],
   });
@@ -127,16 +123,18 @@ const getTaskByLeaderService = async (
 
 const checkTaskServices = async (
   idTask: string,
-  uId: string
+  memid: string,
+  check:boolean
 ): Promise<response> => {
+  logging.debug("check Task", "service", idTask)
   await taskModel.update(
     {
-      isdone: true,
+      ischeck: check,
       updatedAt: new Date(),
     },
     {
       where: {
-        memid: uId ,
+        memid: memid ,
         id: idTask
       },
     }
@@ -149,16 +147,19 @@ const checkTaskServices = async (
 
 
 const updateIsDoneTaskService = async (
-  sender: string,
-  receive: string
+  id: string,
+  isdonetmp:number
 ): Promise<response> => {
+
+ 
   await taskModel.update(
     {
-      isdone: true,
+      isdone: isdonetmp,
+  
       updatedAt: new Date(),
     },
     {
-      where: { leaderid: sender, memid: receive },
+      where: {id: id },
     }
   );
   return {
@@ -167,24 +168,6 @@ const updateIsDoneTaskService = async (
   };
 };
 
-const notDoneTask = async (
-  sender: string,
-  receive: string
-): Promise<response> => {
-  await taskModel.update(
-    {
-      isdone: false,
-      updatedAt: new Date(),
-    },
-    {
-      where: { leaderid: sender, memid: receive },
-    }
-  );
-  return {
-    statusCode: "200",
-    message: "cập nhật thành công",
-  };
-};
 
 const updateTimeTaskService = async (id: string): Promise<response> => {
   await taskModel.update(
@@ -211,6 +194,5 @@ export {
   getAllTaskByLeaderService,
   updateIsDoneTaskService,
   updateTimeTaskService,
-  notDoneTask,
   checkTaskServices
 };

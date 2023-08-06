@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import response from "../interfaces/response.interface";
 import { task } from "../interfaces/task.interface";
+import logging from "../config/logging";
 
 // import { groupMember } from "../interfaces/groupMember.interface";
 import {
@@ -18,7 +19,7 @@ import {
 const createTask = async (req: Request, res: Response) => {
   try {
     const newTask: task = req.body;
-    const response: response = await createTaskService(newTask );
+    const response: response = await createTaskService(newTask);
     res.status(200).json(response);
   } catch (error) {
     res.status(200).json({ statusCode: "400", message: `${error}` });
@@ -58,7 +59,7 @@ const getTaskByDeadline = async (req: Request, res: Response) => {
 };
 
 
-const getTaskByTime= async (req: Request, res: Response) => {
+const getTaskByTime = async (req: Request, res: Response) => {
   try {
     const userId: string = req.params.userId;
     const response: response = await getTaskByTimeService(userId);
@@ -67,7 +68,7 @@ const getTaskByTime= async (req: Request, res: Response) => {
     res.status(200).json({ statusCode: "400", message: `${error}` });
   }
 };
-const getAllTaskByLeader= async (req: Request, res: Response) => {
+const getAllTaskByLeader = async (req: Request, res: Response) => {
   try {
     const userId: string = req.params.userId;
     const response: response = await getAllTaskByLeaderService(userId);
@@ -93,11 +94,10 @@ const getTaskByLeader = async (req: Request, res: Response) => {
 
 const doneTask = async (req: Request, res: Response) => {
   try {
-    const leaderid: string = req.body.leaderid;
-    const memid: string = req.body.memid;
+    const { id, donetmp }= req.body;
     const response: response = await updateIsDoneTaskService(
-      leaderid,
-      memid
+      id,
+      donetmp
     );
     res.status(200).json(response);
   } catch (error) {
@@ -107,11 +107,14 @@ const doneTask = async (req: Request, res: Response) => {
 
 const checkTask = async (req: Request, res: Response) => {
   try {
-    const idTask: string = req.body.idTask;
-    const uID: string = req.body.uId;
+    const { id, memid, ischeck } = req.body;
+    logging.debug("haiizizz", "huhu", req.body)
+    logging.debug("haiizizz", "huhu", id + memid + ischeck)
+
     const response: response = await checkTaskServices(
-      idTask,
-      uID
+      id,
+      memid,
+      ischeck
     );
     res.status(200).json(response);
   } catch (error) {
@@ -130,5 +133,5 @@ export default {
   getTaskByTime,//tassk mowis giao
   getTaskByLeader,//laays tassk theo lead
   getAllTaskByLeader// laays taats car tassk vaf sawps xeeps theo lead
-  
+
 };

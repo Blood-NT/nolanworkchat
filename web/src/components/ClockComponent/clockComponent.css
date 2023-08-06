@@ -1,0 +1,15 @@
+/* styles.css */
+
+.digital-clock {
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333;
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  

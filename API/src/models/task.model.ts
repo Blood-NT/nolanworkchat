@@ -11,7 +11,7 @@ export const taskModel = sequelize.define<task>(
     leaderid: DataTypes.STRING(20),
     memid: DataTypes.STRING(20),
     tasknote: DataTypes.STRING(500),
-    isdone: DataTypes.BOOLEAN,
+    isdone: DataTypes.NUMBER,
     ischeck: DataTypes.BOOLEAN,
     createat:DataTypes.DATE,
     start:DataTypes.DATE,

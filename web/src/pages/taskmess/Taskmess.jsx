@@ -9,8 +9,12 @@ import Conversation from "../../components/conversations/Conversation";
 import MessageText from "../../components/message/messageText";
 import MessageImage from "../../components/message/messageImage";
 import InfoUser from "../../components/infoUser/infoUser";
+import Slider from '@mui/material/Slider';
+
+import Button from "@mui/material/Button";
+
 import { getGroupByUser, getGroup } from "../../api/apiGroup";
-import { getTaskByUser } from "../../api/apiTask";
+import { getTaskByUser, checkTask } from "../../api/apiTask";
 import { getTaskMess, createTaskMessages } from "../../api/apiMessages";
 import { getUserByUsername } from "../../api/apiUser";
 
@@ -34,17 +38,10 @@ const Taskmess = () => {
   const [textSearch, setTextSearch] = useState("");
   const { setNotifi } = useContext(NotifiContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
-
+  const [tmpDone,setTmpDone]=useState(0);
   const inputFile = useRef(null);
 
-  const openChatIfNull = async (users) => {
 
-    const found = await getGroup(user.id, users.senderId);
-    setCurrentChat(found.data)
-    console.log("ok", found.data)
-    handleCurrentChat(found.data)
-    console.log("ok2", currentChat)
-  };
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
@@ -109,15 +106,15 @@ const Taskmess = () => {
           setConversations(res.data || []);
           return;
         }
-        console.log("searchhhh",res)
+        console.log("searchhhh", res)
 
         const searchConversation = [];
         res.data.map((c) => {
           const check = c.taskname
           if (check.includes(textSearch) === true) {
-            
+
             searchConversation.push(c);
-        console.log("search",searchConversation)
+            console.log("search", searchConversation)
 
           }
         });
@@ -194,6 +191,7 @@ const Taskmess = () => {
 
   const handleCurrentChat = (c) => {
 
+    setTmpDone(0)
     const fetchUser = async () => {
       let oppositeId = c.leaderid === user.id ? c.memid : c.leaderid;
       const res = await getUserByUsername(oppositeId);
@@ -204,8 +202,34 @@ const Taskmess = () => {
 
     fetchUser();
     setCurrentChat(c);
+    setTmpDone(c.isdone);
     console.log("chekk", currentChat)
+
   };
+
+
+  const handelCheckTask = (taskId, check) => {
+
+    const fetchUser = async () => {
+      const res = await checkTask(taskId, user.id, check);
+      if (res.statusCode === "200") {
+
+
+        console.log("checktask", res);
+        // const found = await getGroup(user.id, user.senderId);
+        // setCurrentChat(found.data)
+      }
+    };
+
+    fetchUser();
+    // setCurrentChat(c);
+    console.log("chekk", currentChat)
+  }
+
+
+  const valuetext = (value) => {
+    console.log(value);
+  }
   return (
     <>
       {user && (
@@ -366,14 +390,71 @@ const Taskmess = () => {
             <div className="chatOnline" style={{ backgroundColor: "#EFFBFB" }}>
               <div className="chatOnlineWrapper">
 
+                {console.log("curonnn", currentChat)}
                 {currentChat ? (
                   <div className="infotask">
+
+
                     <span>task id: {currentChat.id}</span>
                     <span>task taskname: {currentChat.taskname}</span>
                     <span>task jobid: {currentChat.jobid}</span>
                     <span>task lead: {oppositeUser.firstName + " " + oppositeUser.lastName}</span>
                     <span>task start: {currentChat.start}</span>
                     <span>task end: {currentChat.end}</span>
+
+
+
+
+                    <div className="btnCheck">
+
+                      {
+                        user.id == currentChat.memid ?
+                          (currentChat.ischeck === false ? (
+                            <Button
+                              variant="contained"
+                              sx={{ backgroundColor: "red" }}
+                              onClick={() => {
+                                handelCheckTask(currentChat.id, true)
+                              }}
+                            >
+                              chưa nhận
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              onClick={() => {
+                              }}
+                            >
+                              Đã nhận task
+                            </Button>
+                          )) :
+                          (
+                            <div className="hmmm">
+                              <span>user</span>
+                            </div>
+
+                          )
+
+                      }
+
+
+
+                    </div>
+
+                    {/* <div className="tienDo">
+                      <Box sx={{ width: 300 }}>
+                        <Slider
+                          aria-label="Temperature"
+                          defaultValue={currentChat.isdone}
+                          getAriaValueText={valuetext}
+                          min={currentChat.isdone}
+                          color="secondary"
+                        />
+                      </Box>
+
+                    </div> */}
+
+
                   </div>) : (<span>hãy mở task</span>)
                 }
 

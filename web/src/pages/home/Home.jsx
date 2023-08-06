@@ -17,7 +17,7 @@ import { UserContext } from "../../context/userContext";
 import { getuserWithRole, getAllJob, createJobRes } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
 import "./home.css";
-
+import ClockComponent from "../../components/ClockComponent/ClockComponent";
 import { useNavigate } from "react-router-dom";
 
 
@@ -76,15 +76,15 @@ const Home = () => {
   const [jobPick, setJobPick] = useState([]);
   const [datePick, setDatePick] = useState([]);
 
-  const[leadPick,setLeadPick]=useState("");
+  const [leadPick, setLeadPick] = useState("");
 
 
   const handleChangeTab = (event, newValue) => {
     settValue(newValue);
-    console.log("vallll",tvalue);
+    console.log("vallll", tvalue);
     setJobPick([])
-    setLeadPick([])   
-     };
+    setLeadPick([])
+  };
 
 
   useEffect(() => {
@@ -184,7 +184,7 @@ const Home = () => {
               <form
                 className="loginBox"
                 onSubmit={handleCreateJob}
-                
+
                 style={{ height: "90%", width: "100%" }}
               >
                 <h1 style={{ textAlign: "center" }}> tạo project </h1>
@@ -276,11 +276,11 @@ const Home = () => {
               {jobNotDone.map((c, index) => (
 
                 <div className="conversation"
-                onClick={() => {
-                  
-                  setJobPick(c)      
-                  console.log("jobPick", c);           
-                }}
+                  onClick={() => {
+
+                    setJobPick(c)
+                    console.log("jobPick", c);
+                  }}
                   key={index}
                 >
                   <span>{c.jobname}</span>
@@ -295,12 +295,12 @@ const Home = () => {
 
                 <div className="conversation"
 
-                onClick={() => {
-                  
-                  setJobPick(c)
-                  console.log("jobpick",c)
-                  
-                }}
+                  onClick={() => {
+
+                    setJobPick(c)
+                    console.log("jobpick", c)
+
+                  }}
                   key={index}
                 >
                   <span>{c.jobname}</span>
@@ -312,12 +312,12 @@ const Home = () => {
               {filteredData.map((c, index) => (
 
                 <div className="conversation"
-                onClick={() => {
-                  
-                  setLeadPick(c)
-                  console.log("picklead",leadPick)
-                  
-                }}
+                  onClick={() => {
+
+                    setLeadPick(c)
+                    console.log("picklead", leadPick)
+
+                  }}
                   key={index}
                 >
                   <span>{c.id}</span>
@@ -329,9 +329,17 @@ const Home = () => {
           </Box>
 
         </div>
-        <div className="rightJob">
+        <div className="rightJob" sx={{}}>
           {
-            tvalue==0? (<span>ddoongf hoof cho vui ^^</span>):( tvalue==1?(<span>{jobPick.jobname}</span>): (tvalue==2?(<span>{jobPick.jobname}</span>): (<span>{leadPick.id}</span>) )   )      }
+            tvalue == 0 ? (
+              <ClockComponent/>
+            ) : (
+              tvalue == 1 ? (<span>{jobPick.jobname}</span>
+              ) : (
+                tvalue == 2 ? (<span>{jobPick.jobname}</span>
+                ) : (
+                  <span>{leadPick.id}</span>
+                )))}
         </div>
       </div>
 
