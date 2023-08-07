@@ -18,13 +18,14 @@
 
 .messageText {
   padding-top: 10px;
-  padding-left: 10px;
+  padding-left: 20px;
+  padding-right: 5px;
   padding-bottom: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
   border-radius: 20px;
   background-color: rgb(225, 222, 222);
-  color: black;
+  color: white;
   max-width: 400px;
 }
 

@@ -5,7 +5,7 @@ import App from "./App";
 import { NotifiProvider } from "./context/notifiContext";
 import { UserProvider } from "./context/userContext";
 import { HashRouter } from "react-router-dom";
-
+import "./nolan.css"
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>

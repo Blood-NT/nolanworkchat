@@ -112,7 +112,7 @@ export default function InfoPersonal({ user, setUser }) {
       noValidate
       autoComplete="off"
     >
-     <div>
+     <div style={{ display:"flex", justifyContent:"center"}}>
         <TextField disabled id="outlined-required" label="Id" value={id} />
         <TextField
           disabled
@@ -121,7 +121,7 @@ export default function InfoPersonal({ user, setUser }) {
           value={email}
         />
       </div>
-      <div>
+      <div style={{ display:"flex", justifyContent:"center"}}>
         <TextField
           required
           id="outlined-read-only-input"
@@ -141,6 +141,9 @@ export default function InfoPersonal({ user, setUser }) {
           }}
         />
       </div>
+
+      <div style={{ display:"flex", justifyContent:"center"}}>
+
       <TextField
         label="Describe"
         multiline
@@ -152,6 +155,9 @@ export default function InfoPersonal({ user, setUser }) {
         }}
         sx={{ width: "52ch !important" }}
       />
+   </div>
+
+<div style={{ display:"flex", justifyContent:"center"}}>
 
       <TextField
         id="outlined-basic-7"
@@ -164,8 +170,9 @@ export default function InfoPersonal({ user, setUser }) {
         }}
         sx={{ paddingLeft: "150px", width: "35ch !important" }}
       />
+      </div>
 
-      <div style={{ marginTop: "10px" ,display:"flex", justifyContent: "space-evenly",}}>
+      <div style={{ marginTop: "10px" ,display:"flex", justifyContent: "space-evenly", }}>
 
         <div className="ok" >
         <Button variant="outlined" onClick={handleClickOpen}>

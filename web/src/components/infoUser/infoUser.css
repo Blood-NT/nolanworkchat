@@ -25,11 +25,12 @@
     justify-content: center;
 }
 
+
 .opposite .btn-user button {
     margin-top: 15px;
     margin-left: 10px;
     border-radius : 5%;
-    background-color: #4CAF50;
+    background-color: #4E4F50;
     border: none;
     color: white;
     padding: 13px 25px;
@@ -38,7 +39,10 @@
     display: inline-block;
     font-size: 16px;
     cursor: pointer;
+
 }
+
+
 
 .set-avatar {
     margin-top: 20%;

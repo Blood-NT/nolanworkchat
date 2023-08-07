@@ -38,7 +38,7 @@ const Taskmess = () => {
   const [textSearch, setTextSearch] = useState("");
   const { setNotifi } = useContext(NotifiContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [tmpDone,setTmpDone]=useState(0);
+  const [tmpDone, setTmpDone] = useState(0);
   const inputFile = useRef(null);
 
 
@@ -201,6 +201,7 @@ const Taskmess = () => {
     };
 
     fetchUser();
+    setValueSlide(c.isdone)
     setCurrentChat(c);
     setTmpDone(c.isdone);
     console.log("chekk", currentChat)
@@ -227,16 +228,25 @@ const Taskmess = () => {
   }
 
 
-  const valuetext = (value) => {
-    console.log(value);
-  }
+  const [valueSlide, setValueSlide] = useState(30);
+
+  const handleChangeSlide = (event, newValue) => {
+    // Kiểm tra nếu newValue nhỏ hơn 30, đặt lại giá trị thành 30
+    if (newValue < 30) {
+      setValueSlide(30);
+    } else {
+      setValueSlide(newValue);
+    }
+  };
+
+
   return (
     <>
       {user && (
         <>
           <Topbar setConversations={setConversations} socket={socket} />
           <div className="messenger">
-            <div className="chatMenu" style={{ backgroundColor: "#EFFBFB" }}>
+            <div className="chatMenu" style={{ backgroundColor: "#202123" }}>
               <div className="chatMenuWrapper">
                 <h3>Tất cả các task</h3>
                 <Box sx={{ width: "80%" }}>
@@ -387,24 +397,18 @@ const Taskmess = () => {
                 )}
               </div>
             </div>
-            <div className="chatOnline" style={{ backgroundColor: "#EFFBFB" }}>
+            <div className="chatOnline" style={{ backgroundColor: "#202123" }}>
               <div className="chatOnlineWrapper">
 
                 {console.log("curonnn", currentChat)}
                 {currentChat ? (
                   <div className="infotask">
-
-
                     <span>task id: {currentChat.id}</span>
                     <span>task taskname: {currentChat.taskname}</span>
                     <span>task jobid: {currentChat.jobid}</span>
                     <span>task lead: {oppositeUser.firstName + " " + oppositeUser.lastName}</span>
                     <span>task start: {currentChat.start}</span>
                     <span>task end: {currentChat.end}</span>
-
-
-
-
                     <div className="btnCheck">
 
                       {
@@ -421,17 +425,21 @@ const Taskmess = () => {
                             </Button>
                           ) : (
                             <Button
+                            variant="contained"
+                            onClick={() => {
+                            }}
+                          >
+                            Báo cáo
+                          </Button>
+                          )) :
+                          (
+                            <Button
                               variant="contained"
                               onClick={() => {
                               }}
                             >
-                              Đã nhận task
+                              xem báo cáo
                             </Button>
-                          )) :
-                          (
-                            <div className="hmmm">
-                              <span>user</span>
-                            </div>
 
                           )
 
@@ -441,17 +449,25 @@ const Taskmess = () => {
 
                     </div>
 
-                    {/* <div className="tienDo">
-                      <Box sx={{ width: 300 }}>
-                        <Slider
-                          aria-label="Temperature"
-                          defaultValue={currentChat.isdone}
-                          getAriaValueText={valuetext}
-                          min={currentChat.isdone}
-                          color="secondary"
-                        />
-                      </Box>
+                    {/* <div className="tienDo" style={{ display: "flex", justifyContent: "center" }}>
+                      <Slider
+                        value={valueSlide}
+                        onChange={handleChangeSlide}
+                        defaultValue={valueSlide}
+                        sx={{
+                          width: 300,
 
+                          color: '#C1DDFF', // Mã màu HEX cho neon xanh dương
+                          '& .MuiSlider-thumb': {
+
+                            '&:hover, &.Mui-focusVisible': {
+                              boxShadow: '0px 0px 0px 8px rgba(0, 191, 255, 0.16)', // Mã màu HEX cho hover thumb neon xanh dương
+                            },
+                          },
+                          }
+                        }
+                          />
+                          <span style={{ top: "-15px" }}>{valueSlide}</span>
                     </div> */}
 
 

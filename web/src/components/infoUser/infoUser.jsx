@@ -46,7 +46,7 @@ const InfoUser = ({ oppositeUser, setConversations, setOppositeUser }) => {
   return (
     <>
       {oppositeUser.id ? (
-        <div className="opposite" style={{ backgroundColor: "#EFFBFB" }}>
+        <div className="opposite" style={{ backgroundColor: "#202123" }}>
           <div className="oppositeAvatar">
             <img
               src={
@@ -60,12 +60,12 @@ const InfoUser = ({ oppositeUser, setConversations, setOppositeUser }) => {
           <p>{oppositeUser.id}</p>
           <p>{oppositeUser.firstName + " " + oppositeUser.lastName}</p>
           <div className="btn-user">
-            <button onClick={handleCancelConnect}> Huỷ kết nối </button>
-            <button onClick={handleBlockUser}> Chặn kết nối </button>
+            <button className="btn-user-click" onClick={handleCancelConnect}> Huỷ kết nối </button>
+            <button className="btn-user-click" onClick={handleBlockUser}> Chặn kết nối </button>
           </div>
         </div>
       ) : (
-        <div className="opposite" style={{ backgroundColor: "#EFFBFB" }}>
+        <div className="opposite" style={{ backgroundColor: "#202123" }}>
           <div className="oppositeAvatar">
             <img
               src={

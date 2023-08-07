@@ -83,7 +83,7 @@ const Message = ({
             <div className="messageTop">
               <div
                 className="messageText"
-                style={{ backgroundColor: "#417DC6", marginRight: "10px" }}
+                style={{ backgroundColor: "#0B7EF4", marginRight: "10px" }}
                 onClick={handleClick}
               >
                 <p style={styles.messageText}>{message.messages}</p>
@@ -91,6 +91,7 @@ const Message = ({
                   {moment(message.createAt).format("hh:mm")}
                 </p>
               </div>
+              
               <img
                 className="messageImg"
                 src={
@@ -128,7 +129,7 @@ const Message = ({
               />
               <div
                 className="messageText"
-                style={{ backgroundColor: "#E6E6E6" }}
+                style={{ backgroundColor: "#292929",color:"while" }}
               >
                 <p style={{ paddingRight: "15px" }}>{message.messages}</p>
                 <p style={styles.messageTimeReceive}>
@@ -168,14 +169,14 @@ let styles = {
   },
   messageTimeSender: {
     fontSize: "10px",
-    color: "#0431B4",
+    color: "#444654",
     width: "30px",
     marginLeft: "auto",
     marginRight: "5px",
   },
   messageTimeReceive: {
     fontSize: "10px",
-    color: "#424242",
+    color: "#444654",
     width: "30px",
     marginLeft: "auto",
     marginRight: "5px",

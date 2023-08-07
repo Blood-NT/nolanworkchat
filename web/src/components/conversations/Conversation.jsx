@@ -40,7 +40,7 @@ const Conversation = ({ conversation, currentUser }) => {
             alt=""
           />
 
-          <span className="conversationName">{user?.id}</span>
+          <span className="conversationName" >{user?.id}</span>
         </div>
       )}
     </>

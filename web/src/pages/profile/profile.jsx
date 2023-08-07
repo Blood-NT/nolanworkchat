@@ -70,7 +70,8 @@ const Profile = () => {
         }}
       >
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider", with: "220px", }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", with: "220px", 
+        }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab
                 label="Thông tin"
@@ -85,7 +86,7 @@ const Profile = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <InfoPersonal user={user} setUser={setUser} />
+            <InfoPersonal user={user} setUser={setUser}  />
           </TabPanel>
           <TabPanel value="2">
             <ListBlock user={user} />

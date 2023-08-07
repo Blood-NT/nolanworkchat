@@ -191,8 +191,8 @@ const Messenger = () => {
         <>
           <Topbar setConversations={setConversations} socket={socket} />
           <div className="messenger">
-            <div className="chatMenu" style={{ backgroundColor: "#EFFBFB" }}>
-              <div className="chatMenuWrapper">
+            <div className="chatMenu" style={{ backgroundColor: "#202123" }}>
+              <div className="chatMenuWrapper" style={{overflow: "auto"}}>
                 <ChatOnline onlineUsers={onlineUsers} currentId={user.id} />
                 <h3>Tất cả kết nối</h3>
                 <Box sx={{ width: "80%" }}>
@@ -336,7 +336,7 @@ const Messenger = () => {
                 )}
               </div>
             </div>
-            <div className="chatOnline" style={{ backgroundColor: "#EFFBFB" }}>
+            <div className="chatOnline" style={{ backgroundColor: "#202123" }}>
               <div className="chatOnlineWrapper">
                 <InfoUser
                   oppositeUser={oppositeUser}

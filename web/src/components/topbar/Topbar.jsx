@@ -49,24 +49,7 @@ export default function Topbar({ setConversations, socket }) {
           >
             <span className="logo">Nolan Work</span>
           </Link>
-          <Link
-            to="/leader/job"
-            style={{ textDecoration: "none" }}
-          >
-            <span className="logo">lead</span>
-          </Link>
-          <Link
-            to="/admin/job"
-            style={{ textDecoration: "none" }}
-          >
-            <span className="logo">admin</span>
-          </Link>
-          <Link
-            to="/admin/mess"
-            style={{ textDecoration: "none" }}
-          >
-            <span className="logo">adminMess</span>
-          </Link>
+         
 
         </div>
         <div className="topbarCenter">
@@ -85,6 +68,63 @@ export default function Topbar({ setConversations, socket }) {
           </div>
         </div>
         <div className="topbarRight">
+                {/* {
+                  user.role=="admin"?(
+                    <Link
+                    to="/admin/job"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span className="logo">admin</span>
+                  </Link>
+                  ):(
+                   <>
+                    <Link
+                    to="/leader/job"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span className="logo">lead</span>
+                  </Link>
+              
+                  <Link
+                    to="/admin/mess"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span className="logo">adminMess</span>
+                  </Link>
+                  </>
+                  )
+                } */}
+
+
+
+          
+                    <Link
+                    to="/admin/job"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span className="logo">admin</span>
+                  </Link>
+
+                   <>
+                    <Link
+                    to="/leader/job"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span className="logo">lead</span>
+                  </Link>
+              
+                  <Link
+                    to="/admin/mess"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span className="logo">adminMess</span>
+                  </Link>
+                  </>
+                  
+                
+     
+
+
           <div className="topbarIcons">
             <div className="topbarIconItem">{/* <Person /> */}</div>
             <div className="topbarIconItem">{/* <Chat /> */}</div>

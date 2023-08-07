@@ -5,6 +5,7 @@ import blockUserRoute from "./blockUser.route";
 import messageRoute from "./message.route";
 import jobRoute from "./job.route"
 import taskMseeageRoute from "./taskmessage.route"
+import taskReportRouter from "./taskreport.route"
 import tasskRoute from "./task.route"
 
 const route = (app: Application) => {
@@ -15,6 +16,7 @@ const route = (app: Application) => {
   app.use("/job", jobRoute);
   app.use("/task", tasskRoute);
   app.use("/task-message", taskMseeageRoute);
+  app.use("/task-report", taskReportRouter);
 };
 
 export default route;
