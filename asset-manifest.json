@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/nolanworkchat/tree/main/web/static/css/main.c833ca4f.css",
+    "main.js": "/nolanworkchat/tree/main/web/static/js/main.637ec1fd.js",
+    "index.html": "/nolanworkchat/tree/main/web/index.html",
+    "main.c833ca4f.css.map": "/nolanworkchat/tree/main/web/static/css/main.c833ca4f.css.map",
+    "main.637ec1fd.js.map": "/nolanworkchat/tree/main/web/static/js/main.637ec1fd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c833ca4f.css",
+    "static/js/main.637ec1fd.js"
+  ]
+}
