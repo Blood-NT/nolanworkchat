@@ -45,7 +45,7 @@ const getGroup = async (sender, receive) => {
     const res = await axios.get(
       `${apiURL}/group/get-group/${sender}/${receive}`
     );
-    
+
     return res.data;
   } catch (error) {
     console.log(`${error}`);
@@ -81,16 +81,16 @@ const deleteGroup = async (sender, receive) => {
   }
 };
 
-const checkTask = async (id,memid, ischeck) => {
+const checkTask = async (id, memid, ischeck) => {
   try {
     const fetchData = async () => {
       const body = {
         id,
-       memid,
-         ischeck,
+        memid,
+        ischeck,
       };
       const res = await axios.put(
-        `${apiURL}/task/check-task`,body
+        `${apiURL}/task/check-task`, body
       );
       return res.data;
     };
@@ -102,4 +102,37 @@ const checkTask = async (id,memid, ischeck) => {
 };
 
 
-export { createGroup, getTaskByUser, getGroup, deleteGroup,checkTask };
+const createReport = async (taskid, uid, title, note) => {
+  try {
+    const body = {
+      taskid: taskid,
+      uidreport: uid,
+      title: title,
+      note: note
+    };
+    const res = await axios.post(`${apiURL}/task-report/create`, body);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
+const getAllReport = async (idtask) => {
+  try {
+    const res = await axios.get(`${apiURL}/task-report/get-all/${idtask}`);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
+const getDataReport = async (idreport) => {
+  try {
+    const res = await axios.get(`${apiURL}/task-report/get/${idreport}`);
+    return res.data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
+export { createGroup, getTaskByUser, getGroup, deleteGroup, checkTask, createReport,getAllReport,getDataReport };

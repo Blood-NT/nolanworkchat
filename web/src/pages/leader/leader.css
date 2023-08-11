@@ -3,6 +3,7 @@
     margin: 20px 50px 0px 50px;
     height: 90vh;
 
+
 }
 .LichHome{
     width: 70vw;
@@ -26,6 +27,17 @@
 .MuiBox-root{
     width: 100% !important;
 
+
+
+}
+
+
+.nolanShowTask{
+    margin-top: 10px;
+}
+.nolanShowTask:hover{
+cursor: pointer;
+background-color: #444654;
 }
 /* 
 .MuiTabs-root .Mui-selected {

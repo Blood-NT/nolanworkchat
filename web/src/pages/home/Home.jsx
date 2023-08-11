@@ -90,6 +90,7 @@ const Home = () => {
   useEffect(() => {
 
     const fetchData = async () => {
+
       const res = await getuserWithRole("leader");
       if (res.statusCode === "200") {
         setDataUser(res.data);
@@ -275,7 +276,7 @@ const Home = () => {
 
               {jobNotDone.map((c, index) => (
 
-                <div className="conversation"
+                <div className="nolanShowTask"
                   onClick={() => {
 
                     setJobPick(c)
@@ -293,7 +294,7 @@ const Home = () => {
             <TabPanel tvalue={tvalue} index={2}>
               {jobDone.map((c, index) => (
 
-                <div className="conversation"
+                <div className="nolanShowTask"
 
                   onClick={() => {
 
@@ -311,7 +312,7 @@ const Home = () => {
             <TabPanel tvalue={tvalue} index={3}>
               {filteredData.map((c, index) => (
 
-                <div className="conversation"
+                <div className="nolanShowTask"
                   onClick={() => {
 
                     setLeadPick(c)

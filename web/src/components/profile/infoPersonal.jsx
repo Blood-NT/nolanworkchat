@@ -228,7 +228,7 @@ export default function InfoPersonal({ user, setUser }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClickOpen}>Cancel</Button>
-            <Button onClick={handleSubscribe}>Subscribe</Button>
+            <Button onClick={handleSubscribe}>Đổi mật khẩu</Button>
           </DialogActions>
         </Dialog>
         </div>

@@ -14,14 +14,17 @@ import Slider from '@mui/material/Slider';
 import Button from "@mui/material/Button";
 
 import { getGroupByUser, getGroup } from "../../api/apiGroup";
-import { getTaskByUser, checkTask } from "../../api/apiTask";
+import { getTaskByUser, checkTask, createReport, getAllReport, getDataReport } from "../../api/apiTask";
 import { getTaskMess, createTaskMessages } from "../../api/apiMessages";
 import { getUserByUsername } from "../../api/apiUser";
 
 import { uploadImage } from "../../ultis/uploadFile";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 const Taskmess = () => {
   const MAX_SIZE = useRef(2097000); // 2mb
   const { user, socket } = useContext(UserContext);
@@ -40,6 +43,61 @@ const Taskmess = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [tmpDone, setTmpDone] = useState(0);
   const inputFile = useRef(null);
+
+  const [open, setOpen] = useState(false);
+  const [openDialogData, setOpenDialogData] = useState(false);
+  const [tomTat, settomTat] = useState('');
+  const [noiDung, setnoiDung] = useState('');
+  const [allReport, setAllReport] = useState([]);
+
+  const tomTatInputRef = useRef(null);
+  const noiDungInputRef = useRef(null);
+
+
+  const [missingField, setMissingField] = useState(null);
+
+  useEffect(() => {
+    if (missingField) {
+      const inputElement = document.getElementById(missingField);
+      if (inputElement) {
+        inputElement.focus();
+      }
+    }
+  }, [missingField]);
+
+  const handleClickOpenData = () => {
+
+    setOpenDialogData(!openDialogData)
+  };
+
+
+  const handleClickOpen = () => {
+    setOpen(!open);
+    settomTat('');
+    setnoiDung('');
+  };
+
+  const handelGetAllReport = async () => {
+    let res = await getAllReport(currentChat.id);
+    console.log("report ne ", res);
+    setAllReport(res.data)
+
+  }
+  const handleSubscribe = async () => {
+    if (!tomTat) {
+      setMissingField('tomTat');
+      return;
+    }
+    if (!noiDung) {
+      setMissingField('noiDung');
+      return;
+    }
+    let res = await createReport(currentChat.id, user.id, tomTat, noiDung);
+    setNotifi([res.message]);
+    handleClickOpen();
+    handelGetAllReport();
+
+  };
 
 
 
@@ -198,14 +256,21 @@ const Taskmess = () => {
       if (res.statusCode === "200") {
         setOppositeUser(res.data);
       }
-    };
+
+      let ress = await getAllReport(c.id);
+      setAllReport(ress.data)
+
+    }
+
+
+
 
     fetchUser();
     setValueSlide(c.isdone)
+
     setCurrentChat(c);
     setTmpDone(c.isdone);
     console.log("chekk", currentChat)
-
   };
 
 
@@ -238,6 +303,19 @@ const Taskmess = () => {
       setValueSlide(newValue);
     }
   };
+
+  const [reportNote, setReportNote] = useState("");
+  const [reportTittle, setReportTittle] = useState("");
+
+
+  const handelPickReport = async (idReport) => {
+
+    let res = await getDataReport(idReport);
+    console.log("report ne ", res);
+    handleClickOpenData()
+    setReportNote(res.data.note)
+    setReportTittle(res.data.title)
+  }
 
 
   return (
@@ -399,18 +477,20 @@ const Taskmess = () => {
             </div>
             <div className="chatOnline" style={{ backgroundColor: "#202123" }}>
               <div className="chatOnlineWrapper">
-
-                {console.log("curonnn", currentChat)}
                 {currentChat ? (
                   <div className="infotask">
-                    <span>task id: {currentChat.id}</span>
-                    <span>task taskname: {currentChat.taskname}</span>
-                    <span>task jobid: {currentChat.jobid}</span>
-                    <span>task lead: {oppositeUser.firstName + " " + oppositeUser.lastName}</span>
-                    <span>task start: {currentChat.start}</span>
-                    <span>task end: {currentChat.end}</span>
+                    <span>id: {currentChat.id}<br></br></span> 
+                    <span>taskname: {currentChat.taskname}<br></br></span>
+                    <span>jobid: {currentChat.jobid}<br></br></span>
+                    <span>lead: {oppositeUser.firstName + " " + oppositeUser.lastName}<br></br></span>
+                    <span>start: {currentChat.start}<br></br></span>
+                    <span>end: {currentChat.end}<br></br></span>
+                    <span>nội dung: {currentChat.tasknote}</span>
                     <div className="btnCheck">
 
+                      {
+                        console.log("nolannnn", allReport)
+                      }
                       {
                         user.id == currentChat.memid ?
                           (currentChat.ischeck === false ? (
@@ -424,22 +504,75 @@ const Taskmess = () => {
                               chưa nhận
                             </Button>
                           ) : (
-                            <Button
-                            variant="contained"
-                            onClick={() => {
-                            }}
-                          >
-                            Báo cáo
-                          </Button>
+
+                            <>
+
+
+                              <Button
+                                variant="contained"
+                                onClick={
+                                  handleClickOpen
+                                }
+                              >
+                                Báo cáo
+                              </Button>
+
+
+                              <Dialog open={open} onClose={handleClickOpen}>
+                                <DialogTitle>Báo Cáo Công Việc</DialogTitle>
+                                <DialogContent>
+                                  <TextField
+                                    inputRef={tomTatInputRef}
+
+                                    margin="dense"
+                                    id="tomTat"
+                                    label="Tóm tất nội dung"
+                                    type='text'
+                                    fullWidth
+                                    variant="standard"
+                                    value={tomTat}
+                                    onChange={(e) => {
+                                      settomTat(e.target.value);
+                                    }}
+                                    F />
+                                  <TextField
+                                    inputRef={noiDungInputRef}
+
+                                    multiline
+                                    margin="dense"
+                                    id="noiDung"
+                                    label="chi tiết báo cáo"
+                                    type='text'
+                                    rows={4}
+                                    fullWidth
+                                    variant="standard"
+                                    value={noiDung}
+                                    onChange={(e) => {
+                                      setnoiDung(e.target.value);
+                                    }}
+                                  />
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={handleClickOpen}>Cancel</Button>
+                                  <Button onClick={handleSubscribe}>Báo cáo</Button>
+                                </DialogActions>
+                              </Dialog>
+
+
+                            </>
                           )) :
                           (
-                            <Button
-                              variant="contained"
-                              onClick={() => {
-                              }}
-                            >
-                              xem báo cáo
-                            </Button>
+                            <>
+                              <Button
+                              sx={{margin:"10px"}}
+                                variant="contained"
+                                onClick={() => {
+                                }}
+                              >
+                                đánh dấu đã xong
+                              </Button>
+                            </>
+
 
                           )
 
@@ -447,7 +580,35 @@ const Taskmess = () => {
 
 
 
+
                     </div>
+
+                    {allReport.map((c, index) => (
+                      <div
+
+                        key={index}
+                      >
+                        <div className="tasklist" onClick={() => {
+                          handelPickReport(c.id)
+                        }}>
+                          <span>{c.title}</span>
+
+                          <div className="dialogg">
+                            <Dialog open={openDialogData} onClose={handleClickOpenData}>
+                              <DialogTitle>{reportTittle}</DialogTitle>
+                              <DialogContent>
+                                <span>{reportNote}</span>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleClickOpenData}>close</Button>
+                              </DialogActions>
+                            </Dialog>
+
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
 
                     {/* <div className="tienDo" style={{ display: "flex", justifyContent: "center" }}>
                       <Slider
@@ -471,8 +632,15 @@ const Taskmess = () => {
                     </div> */}
 
 
+
+
+
+
                   </div>) : (<span>hãy mở task</span>)
                 }
+
+
+
 
               </div>
             </div>

@@ -14,6 +14,14 @@
     border: 1px solid #1987DE;
     border-radius: 15pc;
 }
+
+.nolanShowTask{
+    margin-top: 10px;
+}
+.nolanShowTask:hover{
+cursor: pointer;
+background-color: #444654;
+}
 /* 
 .MuiTabs-root .Mui-selected {
     color: #ff0000;

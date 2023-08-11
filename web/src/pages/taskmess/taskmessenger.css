@@ -78,3 +78,29 @@
   font-style: 50px;
   color: gray;
 } */
+.infotask{
+ margin: 20px;
+}
+
+
+.tasklist
+{
+ height: 40px;
+ max-width: 350px;
+ margin-right:10px ;
+}
+.tasklist span {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tasklist:hover {
+cursor: pointer;
+background-color: #444654;
+
+
+  
+}

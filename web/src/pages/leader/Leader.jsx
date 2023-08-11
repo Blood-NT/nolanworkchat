@@ -495,7 +495,7 @@ const Leader = () => {
             <div className="LichHome">
               <div className="left_homee">
                 {taskList.map((c, index) => (
-                  <div
+                  <div className="nolanShowTask"
                     onClick={() => {
                       handleTaskPick(c);
                       console.log(c, user) // 
@@ -503,7 +503,7 @@ const Leader = () => {
                     }}
                     key={index}
                   >
-                    <Picker conversation={c} />
+                    <span> {c.id}-- {c.taskname}</span>
                   </div>
                 ))}
               </div>
@@ -545,21 +545,22 @@ const Leader = () => {
                 </div>
 
                 {taskList.map((c, index) => (
-                  <div
+                  <div className="nolanShowTask"
                     onClick={() => {
                       handleTaskPick(c);
                       setTaskIdShow(c.id)
                     }}
                     key={index}
                   >
-                    <Picker conversation={c} />
+                    {/* <Picker conversation={c} /> */}
+                    <span> {c.id}-- {c.taskname}</span>
                   </div>
                 ))}
 
               </div>
               <div className="right_homee">
                     <span>
-                      {/* {taskshow.taskName} */}kkkkk
+                      {/* {taskshow.taskName} */}
                     </span>
               </div>
             </div>
