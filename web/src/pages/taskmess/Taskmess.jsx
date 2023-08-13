@@ -92,14 +92,12 @@ const Taskmess = () => {
       setMissingField('noiDung');
       return;
     }
-    let res = await createReport(currentChat.id, user.id, tomTat, noiDung);
+    let res = await createReport(currentChat.id, user.id, tomTat, noiDung,valueSlide);
     setNotifi([res.message]);
     handleClickOpen();
     handelGetAllReport();
 
   };
-
-
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
@@ -274,20 +272,15 @@ const Taskmess = () => {
   };
 
 
-  const handelCheckTask = (taskId, check) => {
-
-    const fetchUser = async () => {
+  const handelCheckTask = async(taskId, check) => {
       const res = await checkTask(taskId, user.id, check);
       if (res.statusCode === "200") {
-
-
         console.log("checktask", res);
         // const found = await getGroup(user.id, user.senderId);
         // setCurrentChat(found.data)
       }
-    };
+  
 
-    fetchUser();
     // setCurrentChat(c);
     console.log("chekk", currentChat)
   }
@@ -296,13 +289,10 @@ const Taskmess = () => {
   const [valueSlide, setValueSlide] = useState(30);
 
   const handleChangeSlide = (event, newValue) => {
-    // Kiểm tra nếu newValue nhỏ hơn 30, đặt lại giá trị thành 30
-    if (newValue < 30) {
-      setValueSlide(30);
-    } else {
       setValueSlide(newValue);
-    }
+    
   };
+
 
   const [reportNote, setReportNote] = useState("");
   const [reportTittle, setReportTittle] = useState("");
@@ -485,7 +475,15 @@ const Taskmess = () => {
                     <span>lead: {oppositeUser.firstName + " " + oppositeUser.lastName}<br></br></span>
                     <span>start: {currentChat.start}<br></br></span>
                     <span>end: {currentChat.end}<br></br></span>
-                    <span>nội dung: {currentChat.tasknote}</span>
+                    <span>nội dung: {currentChat.tasknote}<br></br></span>
+                    
+                    <span>tiến độ<br></br> </span>
+                    <div className="tienDo" style={{ display: "flex", justifyContent: "center" }}>
+
+                    <Slider defaultValue={valueSlide}  disabled />
+
+                    <span style={{ top: "-15px" }}>{valueSlide}</span>
+                    </div>
                     <div className="btnCheck">
 
                       {
@@ -551,6 +549,27 @@ const Taskmess = () => {
                                       setnoiDung(e.target.value);
                                     }}
                                   />
+
+                                         <div className="tienDo" style={{ display: "flex", justifyContent: "center" }}>
+                      <Slider
+                        value={valueSlide}
+                        onChange={handleChangeSlide}
+                        defaultValue={valueSlide}
+                        sx={{
+                          width: 300,
+
+                          color: '#C1DDFF', // Mã màu HEX cho neon xanh dương
+                          '& .MuiSlider-thumb': {
+
+                            '&:hover, &.Mui-focusVisible': {
+                              boxShadow: '0px 0px 0px 8px rgba(0, 191, 255, 0.16)', // Mã màu HEX cho hover thumb neon xanh dương
+                            },
+                          },
+                          }
+                        }
+                          />
+                          <span style={{ top: "-15px" }}>{valueSlide}</span>
+                    </div>
                                 </DialogContent>
                                 <DialogActions>
                                   <Button onClick={handleClickOpen}>Cancel</Button>
@@ -610,26 +629,7 @@ const Taskmess = () => {
                     ))}
 
 
-                    {/* <div className="tienDo" style={{ display: "flex", justifyContent: "center" }}>
-                      <Slider
-                        value={valueSlide}
-                        onChange={handleChangeSlide}
-                        defaultValue={valueSlide}
-                        sx={{
-                          width: 300,
-
-                          color: '#C1DDFF', // Mã màu HEX cho neon xanh dương
-                          '& .MuiSlider-thumb': {
-
-                            '&:hover, &.Mui-focusVisible': {
-                              boxShadow: '0px 0px 0px 8px rgba(0, 191, 255, 0.16)', // Mã màu HEX cho hover thumb neon xanh dương
-                            },
-                          },
-                          }
-                        }
-                          />
-                          <span style={{ top: "-15px" }}>{valueSlide}</span>
-                    </div> */}
+             
 
 
 

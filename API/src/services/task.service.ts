@@ -147,7 +147,7 @@ const checkTaskServices = async (
 
 
 const updateIsDoneTaskService = async (
-  id: string,
+  taskid: string,
   isdonetmp:number
 ): Promise<response> => {
 
@@ -159,7 +159,7 @@ const updateIsDoneTaskService = async (
       updatedAt: new Date(),
     },
     {
-      where: {id: id },
+      where: {id: taskid },
     }
   );
   return {

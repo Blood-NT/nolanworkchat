@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
-
 dotenv.config();
-
 const authUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const accessToken: any = req.headers.access_token;
@@ -35,5 +33,4 @@ const authUser = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({ statusCode: "410", message: `${error}` });
   }
 };
-
 export { authUser };

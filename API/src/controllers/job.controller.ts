@@ -7,6 +7,7 @@ import {
   createJobService,
   getJobByUserService,
   getJobByTimeService,
+  donejobService
 } from "../services/job.service";
 
 const createJob = async (req: Request, res: Response) => {
@@ -40,9 +41,24 @@ const getJobByUser = async (req: Request, res: Response) => {
   }
 };
 
+const doneJob = async (req: Request, res: Response) => {
+  try {
+    const { id, donetmp }= req.body;
+    const response: response = await donejobService(
+      id,
+      donetmp
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+
+
 
 export default {
   createJob,
   getJobByUser,
   getJobByTime,
+  doneJob
 };

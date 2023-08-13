@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const logging_1 = __importDefault(require("../config/logging"));
 const task_service_1 = require("../services/task.service");
 const createTask = async (req, res) => {
     try {
@@ -74,9 +78,8 @@ const getTaskByLeader = async (req, res) => {
 };
 const doneTask = async (req, res) => {
     try {
-        const leaderid = req.body.leaderid;
-        const memid = req.body.memid;
-        const response = await (0, task_service_1.updateIsDoneTaskService)(leaderid, memid);
+        const { id, donetmp } = req.body;
+        const response = await (0, task_service_1.updateIsDoneTaskService)(id, donetmp);
         res.status(200).json(response);
     }
     catch (error) {
@@ -85,9 +88,10 @@ const doneTask = async (req, res) => {
 };
 const checkTask = async (req, res) => {
     try {
-        const idTask = req.body.idTask;
-        const uID = req.body.uId;
-        const response = await (0, task_service_1.checkTaskServices)(idTask, uID);
+        const { id, memid, ischeck } = req.body;
+        logging_1.default.debug("haiizizz", "huhu", req.body);
+        logging_1.default.debug("haiizizz", "huhu", id + memid + ischeck);
+        const response = await (0, task_service_1.checkTaskServices)(id, memid, ischeck);
         res.status(200).json(response);
     }
     catch (error) {

@@ -10,5 +10,6 @@ router.get("/get-jobs/:userId", jobController.getJobByTime);
 
 // router.post("/create-job", authUser, jobController.createJob);
 router.post("/create-job",  jobController.createJob);
+router.put("/jobDone",  jobController.doneJob);
 
 export default router;

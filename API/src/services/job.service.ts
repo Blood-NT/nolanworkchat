@@ -57,33 +57,33 @@ const getJobByUserService = async (
   };
 };
 
-// const updateIsDeleteGroupService = async (
-//   sender: string,
-//   receive: string
-// ): Promise<response> => {
-//   if (sender > receive) {
-//     let coppy: string = sender;
-//     sender = receive;
-//     receive = coppy;
-//   }
-//   await jobModel.update(
-//     {
-//       isDelete: true,
-//       updateAt: new Date(),
-//     },
-//     {
-//       where: { sender: sender, receive: receive },
-//     }
-//   );
-//   return {
-//     statusCode: "200",
-//     message: "cập nhật thành công",
-//   };
-// };
+
+const donejobService = async (
+  id: string,
+  isdonetmp:boolean
+): Promise<response> => {
+
+ 
+  await jobModel.update(
+    {
+      jobdone: isdonetmp,
+  
+      updateat: new Date(),
+    },
+    {
+      where: {id: id },
+    }
+  );
+  return {
+    statusCode: "200",
+    message: "cập nhật thành công",
+  };
+};
 
 
 export {
   createJobService,
   getJobByUserService,
   getJobByTimeService,
+  donejobService
 };

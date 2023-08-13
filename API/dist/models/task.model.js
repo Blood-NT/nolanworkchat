@@ -13,7 +13,7 @@ exports.taskModel = connectDB_1.default.define("task", {
     leaderid: sequelize_1.DataTypes.STRING(20),
     memid: sequelize_1.DataTypes.STRING(20),
     tasknote: sequelize_1.DataTypes.STRING(500),
-    isdone: sequelize_1.DataTypes.BOOLEAN,
+    isdone: sequelize_1.DataTypes.NUMBER,
     ischeck: sequelize_1.DataTypes.BOOLEAN,
     createat: sequelize_1.DataTypes.DATE,
     start: sequelize_1.DataTypes.DATE,

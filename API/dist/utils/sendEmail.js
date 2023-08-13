@@ -11,8 +11,8 @@ let transporter = nodemailer_1.default.createTransport({
     host: "smtp.gmail.com",
     secure: false,
     auth: {
-        user: process.env.EMAIL_VALIDATE_ACCOUNT || "ntson.ongroup@gmail.com",
-        pass: process.env.EMAIL_VALIDATE_PASSWORD || "xjrxodkguurkxcva",
+        user: process.env.EMAIL_VALIDATE_ACCOUNT,
+        pass: process.env.EMAIL_VALIDATE_PASSWORD,
     },
 });
 transporter.verify((error, success) => {
@@ -26,7 +26,7 @@ transporter.verify((error, success) => {
 const sendVerificationEmail = async (email, uniqueString) => {
     const currentUrl = process.env.HOST_IP;
     const mailOption = {
-        from: process.env.EMAIL_VALIDATE_ACCOUNT || "ntson.ongroup@gmail.com",
+        from: process.env.EMAIL_VALIDATE_ACCOUNT,
         to: email,
         subject: "Thư xác minh email",
         html: `<div style="display: flex; margin: 0 auto; justify-content: center; align-items: center; height: 100vh; font-family: Arial, Helvetica, sans-serif; box-sizing: border-box;">
@@ -44,7 +44,7 @@ exports.sendVerificationEmail = sendVerificationEmail;
 const sendVerifiForgotPassword = async (email, uniqueString) => {
     const currentUrl = process.env.HOST_IP;
     const mailOption = {
-        from: process.env.EMAIL_VALIDATE_ACCOUNT || "ntson.ongroup@gmail.com",
+        from: process.env.EMAIL_VALIDATE_ACCOUNT,
         to: email,
         subject: "Xác nhận thay đổi mật khẩu",
         html: `<div style="display: flex; margin: 0 auto; justify-content: center; align-items: center; height: 100vh; font-family: Arial, Helvetica, sans-serif; box-sizing: border-box;">

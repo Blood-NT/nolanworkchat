@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState, useContext } from "react";
 import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
-import { getuserWithRole, getAllJob, createJobRes } from "../../api/apiUser";
+import { getuserWithRole, getAllJob, createJobRes, doneJob } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
 import "./projectManager.css";
 import ClockComponent from "../../components/ClockComponent/ClockComponent";
@@ -85,7 +85,34 @@ const ProjectManager = () => {
     setJobPick([])
     setLeadPick([])
   };
+ const loadData= async()=>
+ {
 
+
+    const res = await getuserWithRole("leader");
+    if (res.statusCode === "200") {
+      setDataUser(res.data);
+    }
+    const ress = await getAllJob(user.id);
+    if (ress.statusCode === "200") {
+      setJobList(ress.data);
+    }
+    const jobDoneTmp = [];
+    const jobnotDoneTmp = [];
+    ress.data.map((c) => {
+      const check = c.jobdone
+      if (check == false) {
+        jobnotDoneTmp.push(c);
+      }
+      else
+        jobDoneTmp.push(c)
+    });
+    setjobDone(jobDoneTmp);
+    setjobNotDone(jobnotDoneTmp)
+    setJobPick([])
+
+
+ }
 
   useEffect(() => {
 
@@ -95,8 +122,6 @@ const ProjectManager = () => {
       if (res.statusCode === "200") {
         setDataUser(res.data);
       }
-
-
       const ress = await getAllJob(user.id);
       if (ress.statusCode === "200") {
         setJobList(ress.data);
@@ -135,6 +160,16 @@ const ProjectManager = () => {
   };
 
 
+  const handleDoneJob = async (jobpickTmp)=> {
+    const tmpDone=jobpickTmp.jobdone
+
+    const res = await doneJob(jobpickTmp.id, !tmpDone);
+      if (res.statusCode === "200") {
+        console.log("checktask", res);
+        loadData()
+      }
+
+  }
   return (
     <>
       <Topbar setConversations={null} />
@@ -333,16 +368,46 @@ const ProjectManager = () => {
         <div className="rightJob" sx={{}}>
           {
             tvalue == 0 ? (
-              <ClockComponent/>
+              <ClockComponent />
             ) : (
-              tvalue == 1 ? (<span>{jobPick.jobname}</span>
+
+              tvalue == 3 ? (<span>{leadPick.id}</span>
               ) : (
-                tvalue == 2 ? (<span>{jobPick.jobname}</span>
-                ) : (
-                  <span>{leadPick.id}</span>
-                )))}
-        </div>
+                <>
+                  <span>{jobPick.id}  <br></br></span>
+                  <span>{jobPick.createat} <br></br></span>
+                  <span>{jobPick.jobdone} <br></br></span>
+                  <span>{jobPick.jobnote} <br></br></span>
+                  <span>{jobPick.leaderid} <br></br></span>
+                  {jobPick.jobdone === true ? (
+                    <Button
+                      variant="contained"
+                      onClick={ ()=>{
+                        handleDoneJob(jobPick)
+                      }
+                       
+                      }
+                    >
+                   Đã xong
+                </Button>
+                
+          ) : (
+          <Button
+            variant="contained"
+            onClick={ ()=>{
+              handleDoneJob(jobPick)
+            }
+             
+            }
+          >
+            chưa xong
+          </Button>
+          )
+                  }
+        </>
+              ))}
       </div>
+    </div >
 
     </>
   );

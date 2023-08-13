@@ -218,6 +218,26 @@ const changePass = async (email, oldPass,newPass) => {
     return res.data;
   } catch (err) { }
 };
+
+const doneJob = async (id, donetmp) => {
+  try {
+    const fetchData = async () => {
+      const body = {
+        id,
+        donetmp
+      };
+      const res = await axios.put(
+        `${apiURL}/job/jobDone`, body
+      );
+      return res.data;
+    };
+    let data = await fetchData();
+    return data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
+
 export {
   login,
   registerUser,
@@ -234,5 +254,6 @@ export {
   getAllJob,
   createTaskRes,
   getTaskByUser,
-  changePass
+  changePass,
+  doneJob
 };

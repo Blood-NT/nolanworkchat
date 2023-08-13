@@ -101,16 +101,43 @@ const checkTask = async (id, memid, ischeck) => {
   }
 };
 
+const doneJob = async (id, ischeck) => {
+  try {
+    const fetchData = async () => {
+      const body = {
+        id,
+        ischeck,
+      };
+      const res = await axios.put(
+        `${apiURL}/job/jobDone`, body
+      );
+      return res.data;
+    };
+    let data = await fetchData();
+    return data;
+  } catch (error) {
+    console.log(`${error}`);
+  }
+};
 
-const createReport = async (taskid, uid, title, note) => {
+
+
+const createReport = async (taskid, uid, title, note,done) => {
   try {
     const body = {
       taskid: taskid,
       uidreport: uid,
       title: title,
-      note: note
+      note: note,
     };
     const res = await axios.post(`${apiURL}/task-report/create`, body);
+    const body2 = {
+      taskid: taskid,
+      donetmp:done
+    };
+    const res2 = await axios.put(`${apiURL}/task/done-task`, body2);
+    console.log("done",res2);
+
     return res.data;
   } catch (error) {
     console.log(`${error}`);
