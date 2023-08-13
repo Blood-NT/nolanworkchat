@@ -57,7 +57,7 @@ const columns = [
   },
 ];
 
-const UserMagager = () => {
+const Project = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setRows] = useState([]);
@@ -68,8 +68,9 @@ const UserMagager = () => {
 
   const fetchData = async () => {
     const res = await getAllUser();
+
     if (res.statusCode === "200") {
-      setRows(res.data);
+      setRows(res.data.filter(item => item.role !== 'admin' && item.role !== 'project'));
     }
   };
   useEffect(() => {
@@ -122,11 +123,13 @@ const UserMagager = () => {
   };
 
   const handleSearch = async () => {
-    const rowsData = (await getAllUser()).data;
+    const rowsData = (await getAllUser()).data.filter(item => item.role !== 'admin' && item.role !== 'project');
     if (textSearch === "") {
       setRows(rowsData);
       return;
     }
+
+
     let text = textSearch.toLowerCase();
     let newRows = [];
     rowsData.map((row) => {
@@ -230,9 +233,6 @@ const UserMagager = () => {
                                   value={row["role"]}
                                   onChange={(e) => handlesetRole(row["id"], e.target.value)}
                                 >
-
-                                  <MenuItem value={'admin'}>admin</MenuItem>
-                                  <MenuItem value={'project'}>projectManager</MenuItem>
                                   <MenuItem value={'leader'}>leader</MenuItem>
                                   <MenuItem value={'user'}>member</MenuItem>
 
@@ -309,4 +309,4 @@ const UserMagager = () => {
   );
 };
 
-export default UserMagager;
+export default Project;

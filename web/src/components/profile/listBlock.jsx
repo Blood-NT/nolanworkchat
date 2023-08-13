@@ -37,7 +37,7 @@ export default function ListBlock({ user }) {
   return (
     <Box
       sx={{
-        width: "300px",
+        width: "75vw !important",
         marginLeft: "auto",
         marginRight: "auto",
         bgcolor: "background.paper",

@@ -16,7 +16,7 @@ import { NotifiContext } from "../../context/notifiContext";
 import { UserContext } from "../../context/userContext";
 import { getuserWithRole, getAllJob, createJobRes } from "../../api/apiUser";
 import Autocomplete from '@mui/material/Autocomplete';
-import "./home.css";
+import "./projectManager.css";
 import ClockComponent from "../../components/ClockComponent/ClockComponent";
 import { useNavigate } from "react-router-dom";
 
@@ -55,7 +55,7 @@ TabPanel.propTypes = {
 };
 
 
-const Home = () => {
+const ProjectManager = () => {
   const [textSearch, setTextSearch] = useState("");
   const { setNotifi } = useContext(NotifiContext);
   const { user } = useContext(UserContext);
@@ -348,4 +348,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ProjectManager;

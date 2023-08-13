@@ -43,13 +43,13 @@ export default function Topbar({ setConversations, socket }) {
           <Link
             to="/"
             style={{ textDecoration: "none" }}
-            // onClick={() => {
-            //   window.location.reload();
-            // }}
+          // onClick={() => {
+          //   window.location.reload();
+          // }}
           >
             <span className="logo">Nolan Work</span>
           </Link>
-         
+
 
         </div>
         <div className="topbarCenter">
@@ -68,7 +68,7 @@ export default function Topbar({ setConversations, socket }) {
           </div>
         </div>
         <div className="topbarRight">
-                {/* {
+          {/* {
                   user.role=="admin"?(
                     <Link
                     to="/admin/job"
@@ -96,33 +96,66 @@ export default function Topbar({ setConversations, socket }) {
                 } */}
 
 
+          {
+            user?.role == "leader" && (
+              <>
+                <Link
+                  to="/leader/job"
+                  style={{ textDecoration: "none" }}
+                >
+                  <span className="logo">lead</span>
+                </Link>
 
+                <Link
+                  to="/admin/mess"
+                  style={{ textDecoration: "none" }}
+                >
+                  <span className="logo">adminMess</span>
+                </Link>
+              </>
+
+            ) 
+
+     
+       
+
+
+          }
+
+          {
+                   user?.role == "project" && (
+                    <Link
+                      to="/admin/job"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <span className="logo">admin</span>
+                    </Link>
           
-                    <Link
-                    to="/admin/job"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <span className="logo">admin</span>
-                  </Link>
+                    )
+          }
 
-                   <>
+
+{
+                   user?.role == "user" && (
                     <Link
-                    to="/leader/job"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <span className="logo">lead</span>
-                  </Link>
-              
-                  <Link
                     to="/admin/mess"
                     style={{ textDecoration: "none" }}
                   >
                     <span className="logo">adminMess</span>
                   </Link>
-                  </>
-                  
-                
-     
+          
+                    )
+          }
+
+
+
+
+
+
+
+
+
+
 
 
           <div className="topbarIcons">
@@ -161,6 +194,15 @@ export default function Topbar({ setConversations, socket }) {
               <MenuItem
                 onClick={() => {
                   navigate("/admin/user-manager");
+                }}
+              >
+                Quản lý
+              </MenuItem>
+            )}
+              {user?.role === "project" && (
+              <MenuItem
+                onClick={() => {
+                  navigate("/admin/project-manager");
                 }}
               >
                 Quản lý

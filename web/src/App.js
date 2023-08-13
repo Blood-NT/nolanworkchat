@@ -4,7 +4,7 @@ import Messenger from "./pages/messenger/Messenger";
 import Profile from "./pages/profile/profile";
 import ForgotPassword from "./pages/forgotPassword/forgotPassword";
 import UserMagager from "./pages/admin/user";
-import Home from "./pages/home/Home";
+import ProjectManager from "./pages/projectManager/ProjectManager";
 import Leader from "./pages/leader/Leader";
 import Taskmess from "./pages/taskmess/Taskmess"
 import { Route, Routes } from "react-router-dom";
@@ -13,6 +13,7 @@ import { loginByToken } from "./api/apiUser";
 import OpenNotifi from "./hooks/openNotifi";
 import { NotifiContext } from "./context/notifiContext";
 import { UserContext } from "./context/userContext";
+import Project from "./pages/admin/projcet";
 
 function App() {
   const { notifi, setNotifi } = useContext(NotifiContext);
@@ -54,7 +55,7 @@ function App() {
         <Route path="/leader/job" element={<Leader />} />
       </Routes>
       <Routes>
-        <Route path="/admin/job" element={<Home />} />
+        <Route path="/admin/job" element={<ProjectManager />} />
       </Routes>
       <Routes>
         <Route path="/admin/mess" element={<Taskmess />} />
@@ -62,6 +63,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/admin/user-manager" element={<UserMagager />} />
+      </Routes>
+      <Routes>
+        <Route path="/admin/project-manager" element={<Project />} />
       </Routes>
       {notifi[0] && <OpenNotifi notifi={notifi} setNotifi={setNotifi} />}
     </>
