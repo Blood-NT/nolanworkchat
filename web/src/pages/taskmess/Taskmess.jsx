@@ -42,6 +42,7 @@ const Taskmess = () => {
   const { setNotifi } = useContext(NotifiContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [tmpDone, setTmpDone] = useState(0);
+  const [tmpCheck, setTmpCheck] = useState(false);
   const inputFile = useRef(null);
 
   const [open, setOpen] = useState(false);
@@ -254,18 +255,13 @@ const Taskmess = () => {
       if (res.statusCode === "200") {
         setOppositeUser(res.data);
       }
-
       let ress = await getAllReport(c.id);
       setAllReport(ress.data)
 
     }
-
-
-
-
     fetchUser();
     setValueSlide(c.isdone)
-
+    setTmpCheck(c.ischeck)
     setCurrentChat(c);
     setTmpDone(c.isdone);
     console.log("chekk", currentChat)
@@ -276,8 +272,10 @@ const Taskmess = () => {
       const res = await checkTask(taskId, user.id, check);
       if (res.statusCode === "200") {
         console.log("checktask", res);
-        // const found = await getGroup(user.id, user.senderId);
-        // setCurrentChat(found.data)
+    
+        setTmpCheck(true)
+
+        /////
       }
   
 
@@ -333,7 +331,6 @@ const Taskmess = () => {
                   <div
                     onClick={() => {
                       handleCurrentChat(c);
-                      // console.log( c.id)
                     }}
                     key={index}
                   >
@@ -491,7 +488,7 @@ const Taskmess = () => {
                       }
                       {
                         user.id == currentChat.memid ?
-                          (currentChat.ischeck === false ? (
+                          (tmpCheck === false ? (
                             <Button
                               variant="contained"
                               sx={{ backgroundColor: "red" }}

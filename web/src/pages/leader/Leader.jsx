@@ -102,32 +102,31 @@ const Leader = () => {
       const datafil = searchConversation.filter(item => item.end === today);
 
       setTaskList(datafil);
-    } else if(newValue==2)
-    {
+    } else if (newValue == 2) {
       setTaskList(searchConversation);
 
     }
 
   };
   const handleTaskPick = (value) => {
-    
+
     console.log('ahehe', taskidShow)
   };
 
 
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await getuserWithRole("member");
       if (res.statusCode === "200") {
         setDataUser(res.data);
       }
-  
+
       const ress = await getAllJob(user.id);
       if (ress.statusCode === "200") {
         setDatajob(ress.data);
       }
-  
+
     };
     fetchData();
   }, []);
@@ -254,10 +253,10 @@ const Leader = () => {
       setTaskList([])
       searchConversation.sort((a, b) => {
         if (a.taskname < b.taskname) {
-          return 1;
+          return -1;
         }
         if (a.taskname > b.taskname) {
-          return -1;
+          return 1;
         }
         return 0;
       });
@@ -270,10 +269,10 @@ const Leader = () => {
       setTaskList([])
       searchConversation.sort((a, b) => {
         if (a.taskname < b.taskname) {
-          return -1;
+          return 1;
         }
         if (a.taskname > b.taskname) {
-          return 1;
+          return -1;
         }
         return 0;
       });
@@ -282,32 +281,21 @@ const Leader = () => {
       setTaskList(searchConversation);
     }
     if (value.val === 5) {
-      // theo update
-      setTaskList(searchConversation);
+      const sorted = [...searchConversation].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      setTaskList(sorted);
     }
     if (value.val === 6) {
-      // theo ngày tạo
-      setTaskList(searchConversation);
+      const sorted = [...searchConversation].sort((a, b) => new Date(b.createat) - new Date(a.createat));
+      setTaskList(sorted);
     }
     if (value.val === 7) {
-      console.log("sort", searchConversation)
-
-      if (user.role == "admin") {
-
-        searchConversation.sort((a, b) => {
-          if (a.memid < b.memid) {
-            return 1;
-          }
-          if (a.memid > b.memid) {
-            return -1;
-          }
-          return 0;
-        });
-        console.log("done sort", searchConversation)
-      }
-      // theo user
-      setTaskList(searchConversation);
+    const tmp_sort= [...searchConversation].sort((a, b) => a.memid.localeCompare(b.memid))
+      setTaskList(tmp_sort);
     }
+    if (value.val === 8) {
+      const tmp_sort= [...searchConversation].sort((a, b) => b.memid.localeCompare(a.memid))
+        setTaskList(tmp_sort);
+      }
   };
 
 
@@ -318,7 +306,8 @@ const Leader = () => {
     { label: 'z -> a', val: 4 },
     { label: 'mới cập nhật', val: 5 },
     { label: 'task mới tạo', val: 6 },
-    { label: 'lọc theo user', val: 7 },
+    { label: 'lọc theo user a -> z', val: 7 },
+    { label: 'lọc theo user z -> a', val: 8 },
 
   ];
 
@@ -498,12 +487,11 @@ const Leader = () => {
                   <div className="nolanShowTask"
                     onClick={() => {
                       handleTaskPick(c);
-                      console.log(c, user) // 
                       setTaskIdShow(c.id)
                     }}
                     key={index}
                   >
-                    <span> {c.id}-- {c.taskname}</span>
+                    <span> {c.id}---- {c.taskname} -- {c.memid}</span>
                   </div>
                 ))}
               </div>
@@ -553,20 +541,20 @@ const Leader = () => {
                     key={index}
                   >
                     {/* <Picker conversation={c} /> */}
-                    <span> {c.id}-- {c.taskname}</span>
+                    <span> {c.id}---- {c.taskname} -- {c.memid}</span>
                   </div>
                 ))}
 
               </div>
               <div className="right_homee">
-                    <span>
-                      {/* {taskshow.taskName} */}
-                    </span>
+                <span>
+                  {/* {taskshow.taskName} */}
+                </span>
               </div>
             </div>
 
           </TabPanel>
-     
+
         </Box>
 
 
