@@ -76,6 +76,7 @@ const Taskmess = () => {
     setOpen(!open);
     settomTat('');
     setnoiDung('');
+    console.log("nolannnnnjkknkln",currentChat);
   };
 
   const handelGetAllReport = async () => {
@@ -98,6 +99,14 @@ const Taskmess = () => {
     handleClickOpen();
     handelGetAllReport();
 
+    socket.emit("sendReport", {
+     
+      receiverId: currentChat.leaderid,
+ 
+    });
+
+
+
   };
 
   useEffect(() => {
@@ -110,6 +119,12 @@ const Taskmess = () => {
       });
       console.log("ok021")
     });
+
+    socket.on("getreport", () => {
+      handelGetAllReport();
+      
+    });
+
     socket.on("getDeleteMessage", () => {
       setLoadData((loadData) => ++loadData);
     });
@@ -477,7 +492,7 @@ const Taskmess = () => {
                     <span>tiến độ<br></br> </span>
                     <div className="tienDo" style={{ display: "flex", justifyContent: "center" }}>
 
-                    <Slider defaultValue={valueSlide}  disabled />
+                    <Slider defaultValue={valueSlide} value={valueSlide}  disabled />
 
                     <span style={{ top: "-15px" }}>{valueSlide}</span>
                     </div>
@@ -579,14 +594,14 @@ const Taskmess = () => {
                           )) :
                           (
                             <>
-                              <Button
+                              {/* <Button
                               sx={{margin:"10px"}}
                                 variant="contained"
                                 onClick={() => {
                                 }}
                               >
                                 đánh dấu đã xong
-                              </Button>
+                              </Button> */}
                             </>
 
 

@@ -113,7 +113,18 @@ const Leader = () => {
     console.log('ahehe', taskidShow)
   };
 
+  const loadrData = async () => {
+    const res = await getuserWithRole("member");
+    if (res.statusCode === "200") {
+      setDataUser(res.data);
+    }
 
+    const ress = await getAllJob(user.id);
+    if (ress.statusCode === "200") {
+      setDatajob(ress.data);
+    }
+
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,6 +140,7 @@ const Leader = () => {
 
     };
     fetchData();
+    loadrData()
   }, []);
   const filteredData = dataUser.filter(item => item.lock === false);
   const filteredData2 = datajob.filter(item => item.jobdone === false);
@@ -205,6 +217,7 @@ const Leader = () => {
       setTaskList(searchConversation.sort((a, b) => a.taskname.localeCompare(b.taskname)));
     };
     fetchData();
+    loadrData()
   }, [user?.id]);
 
   const handelDate = async (e) => {
@@ -289,13 +302,13 @@ const Leader = () => {
       setTaskList(sorted);
     }
     if (value.val === 7) {
-    const tmp_sort= [...searchConversation].sort((a, b) => a.memid.localeCompare(b.memid))
+      const tmp_sort = [...searchConversation].sort((a, b) => a.memid.localeCompare(b.memid))
       setTaskList(tmp_sort);
     }
     if (value.val === 8) {
-      const tmp_sort= [...searchConversation].sort((a, b) => b.memid.localeCompare(a.memid))
-        setTaskList(tmp_sort);
-      }
+      const tmp_sort = [...searchConversation].sort((a, b) => b.memid.localeCompare(a.memid))
+      setTaskList(tmp_sort);
+    }
   };
 
 

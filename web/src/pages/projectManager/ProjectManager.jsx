@@ -71,7 +71,7 @@ const ProjectManager = () => {
   const [jobDone, setjobDone] = useState([])
   const [jobNotDone, setjobNotDone] = useState([])
   const [tvalue, settValue] = useState(0);
-
+  const [checking, setchecking]= useState(false)
 
   const [jobPick, setJobPick] = useState([]);
   const [datePick, setDatePick] = useState([]);
@@ -84,6 +84,9 @@ const ProjectManager = () => {
     console.log("vallll", tvalue);
     setJobPick([])
     setLeadPick([])
+    setchecking(false)
+    loadData()
+
   };
  const loadData= async()=>
  {
@@ -155,8 +158,11 @@ const ProjectManager = () => {
     e.preventDefault();
     let res = await createJobRes(jobId, jobname, jobnote, value.id, user.id);
     console.log("new user ", res);
+    loadData()
 
-    setNotifi([res.message]);
+    //
+    setNotifi([res.message]);///
+
   };
 
 
@@ -313,7 +319,7 @@ const ProjectManager = () => {
 
                 <div className="nolanShowTask"
                   onClick={() => {
-
+                    setchecking(true)
                     setJobPick(c)
                     console.log("jobPick", c);
                   }}
@@ -332,7 +338,7 @@ const ProjectManager = () => {
                 <div className="nolanShowTask"
 
                   onClick={() => {
-
+                    setchecking(true)
                     setJobPick(c)
                     console.log("jobpick", c)
 
@@ -379,30 +385,23 @@ const ProjectManager = () => {
                   <span>{jobPick.jobdone} <br></br></span>
                   <span>{jobPick.jobnote} <br></br></span>
                   <span>{jobPick.leaderid} <br></br></span>
-                  {jobPick.jobdone === true ? (
-                    <Button
-                      variant="contained"
-                      onClick={ ()=>{
-                        handleDoneJob(jobPick)
-                      }
-                       
-                      }
-                    >
-                   Đã xong
-                </Button>
-                
-          ) : (
-          <Button
-            variant="contained"
-            onClick={ ()=>{
-              handleDoneJob(jobPick)
-            }
-             
-            }
-          >
-            chưa xong
-          </Button>
-          )
+                  {checking==true ? 
+                     (
+                      <Button
+                        variant="contained"
+                        onClick={ ()=>{
+                          handleDoneJob(jobPick)
+                        }
+                         
+                        }
+                      >
+                     {jobPick.jobdone === true ? ("Đã xong"):("Chưa xong")}
+                  </Button>
+                  
+                    
+
+                  ):(<></>)
+                    
                   }
         </>
               ))}
