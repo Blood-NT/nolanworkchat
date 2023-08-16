@@ -7,6 +7,7 @@ import jobRoute from "./job.route"
 import taskMseeageRoute from "./taskmessage.route"
 import taskReportRouter from "./taskreport.route"
 import tasskRoute from "./task.route"
+import roomRouter from "./room.route"
 
 const route = (app: Application) => {
   app.use("/user", userRoute);
@@ -17,6 +18,7 @@ const route = (app: Application) => {
   app.use("/task", tasskRoute);
   app.use("/task-message", taskMseeageRoute);
   app.use("/task-report", taskReportRouter);
+  app.use("/room", roomRouter);
 };
 
 export default route;

@@ -59,7 +59,7 @@ const getUserService = async (id: string, email: string) => {
       lock: false,
       verify: true,
     },
-    attributes: ["id", "firstName", "lastName", "email", "describe", "avatar"],
+    attributes: ["id", "firstName", "lastName", "email", "describe", "avatar","idphongban"],
   });
   return {
     statusCode: "200",
@@ -74,7 +74,7 @@ const getAllUserService = async () => {
       // role: "user",
       verify: true,
     },
-    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock","role"],
+    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock","role","idphongban"],
     order: [["id", "ASC"]],
   });
   await map(foundUser, (data, index) => {
@@ -97,7 +97,7 @@ const getUserWithRoleService = async (role:string) => {
       role: role,
       verify: true,
     },
-    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock","role"],
+    attributes: ["id", "firstName", "lastName", "email", "avatar", "lock","role","idphongban"],
     order: [["id", "ASC"]],
   });
   await map(foundUser, (data, index) => {
@@ -318,6 +318,23 @@ const setRoleService = async (
   };
 };
 
+
+const setRoomService = async (
+  uid: string,
+  idphongban: string
+): Promise<response> => {
+  await userModel.update(
+    {
+      idphongban:idphongban,
+    },
+    { where: { id:uid} }
+  );
+  return {
+    statusCode: "200",
+    message: "cập nhật thành công ",
+  };
+};
+
 export {
   createUserService,
   getUserService,
@@ -330,5 +347,6 @@ export {
   changePasswordUserService,
   lockUserService,
   changepassService,
-  setRoleService
+  setRoleService,
+  setRoomService
 };

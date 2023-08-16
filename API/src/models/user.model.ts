@@ -17,6 +17,7 @@ export const userModel = sequelize.define<user>(
     role: DataTypes.STRING(50),
     verify: DataTypes.BOOLEAN,
     refreshToken: DataTypes.STRING(500),
+    idphongban:DataTypes.STRING(20),
   },
   {
     timestamps: false,

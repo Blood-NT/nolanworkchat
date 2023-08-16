@@ -225,13 +225,11 @@ const Leader = () => {
 
     const dateObj = e.format('YYYY-MM-DD');
     const res = await getTaskByUser(user?.id);
-
     const searchConversation = [];
     res.data.map((c) => {
       searchConversation.push(c);
     }
     );
-
     // Lọc ra các phần tử có thuộc tính "end" bằng giá trị của biến "date"
     const filteredData = searchConversation.filter(item => item.end === dateObj);
     setTaskList(filteredData)
@@ -367,7 +365,6 @@ const Leader = () => {
           <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
 
           <TabPanel tvalue={tvalue} index={0}>
-
 
             <div className="LichHome">
               <form

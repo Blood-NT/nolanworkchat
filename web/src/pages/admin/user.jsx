@@ -20,6 +20,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import PickRoom from "../../components/pickroom/pickroom";
 
 const columns = [
   { id: "avatar", label: "Avatar" },
@@ -39,10 +40,19 @@ const columns = [
     label: "Email",
     format: (value) => value.toFixed(2),
   },
+
+  {
+    id: "room",
+    label: "Phòng",
+    format: (value) => value.toFixed(2),
+
+  
+  },
   {
     id: "lock",
     label: "role",
     format: (value) => value.toFixed(2),
+
   },
   {
     id: "status",
@@ -103,11 +113,6 @@ const UserMagager = () => {
       return;
     }
     await fetchData();
-    // if (lock === true) {
-    //   setNotifi(["Khóa tài khoản thành công", "success"]);
-    //   return;
-    // }
-    // setNotifi(["Mở khóa tài khoản thành công", "success"]);
   };
 
 
@@ -205,8 +210,10 @@ const UserMagager = () => {
                       role="checkbox"
                       tabIndex={-1}
                       key={row.code}
-
-                    >
+                    >{console.log("colum nè", columns)}
+                      {
+                        console.log("row", row)
+                      }
                       {columns.map((column) => {
                         const value = row[column.id];
                         if (column.id === "avatar") {
@@ -216,13 +223,24 @@ const UserMagager = () => {
                             </TableCell>
                           );
                         }
+
+                        if (column.id === "room") {
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                            <PickRoom user={row}/>
+                            </TableCell>
+                            );
+                        }
+                        
+                      
+                        
                         if (column.id === "lock") {
                           return (
                             // <TableCell key={column.id} align={column.align}>
                             //   {value === false ? "Chưa khóa" : "Bị khóa"}
 
-                            <Box sx={{ minWidth: 120 }}>
-                              <FormControl fullWidth>
+                            <Box sx={{ maxWidth: "250px" }}>
+                              <FormControl fullWidth size="small">
                                 <InputLabel id="demo-simple-select-label"></InputLabel>
                                 <Select
                                   labelId="demo-simple-select-label"
@@ -230,13 +248,10 @@ const UserMagager = () => {
                                   value={row["role"]}
                                   onChange={(e) => handlesetRole(row["id"], e.target.value)}
                                 >
-
                                   <MenuItem value={'admin'}>admin</MenuItem>
                                   <MenuItem value={'project'}>projectManager</MenuItem>
                                   <MenuItem value={'leader'}>leader</MenuItem>
                                   <MenuItem value={'user'}>member</MenuItem>
-
-
                                 </Select>
                               </FormControl>
                             </Box>
@@ -255,6 +270,10 @@ const UserMagager = () => {
                             </TableCell>
                           );
                         }
+                      
+
+
+
                         if (column.id === "handle") {
                           return (
                             <TableCell key={column.id} align={column.align}>

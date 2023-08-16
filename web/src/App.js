@@ -14,6 +14,7 @@ import OpenNotifi from "./hooks/openNotifi";
 import { NotifiContext } from "./context/notifiContext";
 import { UserContext } from "./context/userContext";
 import Project from "./pages/admin/projcet";
+import Room from "./pages/admin/room";
 
 function App() {
   const { notifi, setNotifi } = useContext(NotifiContext);
@@ -66,6 +67,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/admin/project-manager" element={<Project />} />
+      </Routes>
+      <Routes>
+        <Route path="/admin/room" element={<Room />} />
       </Routes>
       {notifi[0] && <OpenNotifi notifi={notifi} setNotifi={setNotifi} />}
     </>

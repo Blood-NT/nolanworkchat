@@ -18,7 +18,8 @@ import {
   changePasswordUserService,
   lockUserService,
   changepassService,
-  setRoleService
+  setRoleService,
+  setRoomService
 } from "../services/user.service";
 import {
   sendVerificationEmail,
@@ -282,6 +283,19 @@ const verified = (_req: Request, res: Response) => {
   }
 };
 
+
+const setRoom = async (req: Request, res: Response) => {
+  try {
+    const { uid, idphongban } = req.body;
+    const response: response = await setRoomService(uid, idphongban);
+    res.status(200).json(response);
+
+  } catch (error) {
+    res.status(200).json({ statusCode: "400", message: `${error}` });
+  }
+};
+
+
 export default {
   createUser,
   login,
@@ -299,5 +313,6 @@ export default {
   createForgotPassword,
   verifyChangePassword,
   lockUser,
-  setRole
+  setRole,
+  setRoom
 };

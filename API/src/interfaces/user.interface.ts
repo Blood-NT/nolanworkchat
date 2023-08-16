@@ -14,4 +14,5 @@ export interface user
   role?: string;
   verify?: boolean;
   refreshToken?: string;
+  idphongban:string;
 }

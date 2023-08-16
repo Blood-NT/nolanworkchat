@@ -191,13 +191,22 @@ export default function Topbar({ setConversations, socket }) {
             </MenuItem>
             <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             {user?.role === "admin" && (
+             <>
               <MenuItem
                 onClick={() => {
                   navigate("/admin/user-manager");
                 }}
               >
-                Quản lý
+                Quản lý user
               </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate("/admin/room");
+                }}
+              >
+                Quản lý phòng ban
+              </MenuItem>
+              </>
             )}
               {user?.role === "project" && (
               <MenuItem
