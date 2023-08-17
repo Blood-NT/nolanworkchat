@@ -94,7 +94,7 @@ const ProjectManager = () => {
 
     const res = await getuserWithRole("leader");
     if (res.statusCode === "200") {
-      setDataUser(res.data);
+      setDataUser(res.data.filter(item => item.idphongban ==user.idphongban));
     }
     const ress = await getAllJob(user.id);
     if (ress.statusCode === "200") {
@@ -123,7 +123,8 @@ const ProjectManager = () => {
 
       const res = await getuserWithRole("leader");
       if (res.statusCode === "200") {
-        setDataUser(res.data);
+        setDataUser(res.data.filter(item => item.idphongban ==user.idphongban));
+
       }
       const ress = await getAllJob(user.id);
       if (ress.statusCode === "200") {

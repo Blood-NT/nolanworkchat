@@ -1,24 +1,40 @@
-import React, { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
+import React, { useState,useEffect } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { getRoom, setRoom } from '../../api/APIRoom';
 
-const names = [
-    "admin",
-    "admin1",
-    "admin2",
-];
+
 
 export default function PickRoom({ user }) {
-  const [personName, setPersonName] = useState(user.id || 'kdjvnasjdvn');
+  const [personName, setPersonName] = useState(user.idphongban || "xoa01");
+  const [allRoom, setAllRoom] = useState([]);
 
-  const handleChange = (event) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getRoom();
+      if (res.statusCode === "200") {
+        console.log("rooom ne",res.data);
+      }
+      setAllRoom(res.data)
+    };
+    fetchData();
+
+  }, []);
+
+
+  const handleChange = async(event) => {
     setPersonName(event.target.value);
     console.log(event.target.value);
     console.log("pick ne",user.id);
+    const res= await setRoom(user.id,event.target.value)
+    if (res.statusCode === "200") {
+      console.log("rooom ne",res);
+    }
+
+
   };
 
   return (
@@ -32,9 +48,9 @@ export default function PickRoom({ user }) {
           onChange={handleChange}
           input={<OutlinedInput label="Name" />}
         >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              {name}
+          {allRoom.map((room) => (
+            <MenuItem key={room.id} value={room.id}>
+              {room.tenphong}
             </MenuItem>
           ))}
         </Select>

@@ -116,7 +116,8 @@ const Leader = () => {
   const loadrData = async () => {
     const res = await getuserWithRole("member");
     if (res.statusCode === "200") {
-      setDataUser(res.data);
+      setDataUser(res.data.filter(item => item.idphongban ==user.idphongban));
+
     }
 
     const ress = await getAllJob(user.id);
@@ -130,7 +131,9 @@ const Leader = () => {
     const fetchData = async () => {
       const res = await getuserWithRole("member");
       if (res.statusCode === "200") {
-        setDataUser(res.data);
+
+        setDataUser(res.data.filter(item => item.idphongban ==user.idphongban));
+
       }
 
       const ress = await getAllJob(user.id);

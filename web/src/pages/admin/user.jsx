@@ -239,8 +239,9 @@ const UserMagager = () => {
                             // <TableCell key={column.id} align={column.align}>
                             //   {value === false ? "Chưa khóa" : "Bị khóa"}
 
-                            <Box sx={{ maxWidth: "250px" }}>
-                              <FormControl fullWidth size="small">
+                          <TableCell>
+                              <Box sx={{ maxWidth: "250px"}} >
+                              <FormControl fullWidth size="small" sx={{m: 1}}>
                                 <InputLabel id="demo-simple-select-label"></InputLabel>
                                 <Select
                                   labelId="demo-simple-select-label"
@@ -255,6 +256,7 @@ const UserMagager = () => {
                                 </Select>
                               </FormControl>
                             </Box>
+                          </TableCell>
                           );
                         }
                         if (column.id === "status") {

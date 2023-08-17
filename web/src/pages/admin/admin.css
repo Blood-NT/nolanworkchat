@@ -1,0 +1,9 @@
+.showRoom{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 5px;
+}
+.showRoom:hover{
+    background: rgb(123, 121, 121);
+    cursor: pointer;
+}

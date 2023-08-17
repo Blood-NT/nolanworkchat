@@ -10,14 +10,20 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Topbar from "../../components/topbar/Topbar";
 import Button from "@mui/material/Button";
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 import PropTypes from 'prop-types';
 import TextField from "@mui/material/TextField";
 
 import Typography from '@mui/material/Typography';
-import { createRoom } from "../../api/APIRoom";
+import { createRoom, deleteRoom, getRoom, updateRoom } from "../../api/APIRoom";
+
+
+import "./admin.css";
 
 
 function TabPanel(props) {
@@ -54,12 +60,75 @@ const Room = () => {
   const [tvalue, settValue] = useState(0);
   const [idRoom, setIdRoom] = useState("");
   const [roomName, setRoomName] = useState("");
+  const [allRoom, setAllRoom] = useState([]);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [newRoomName, setNewRoomName] = useState('kkk');
+  const [tmpId, setTmpId] = useState("");
+  const [tmpName, setTmpName] = useState("");
 
 
-  const handleChangeTab = (event, newValue) => {
+  
+  const handleClickEditOpen = () => {
+    setOpenEdit(!openEdit);
+
+  };
+
+  
+  const handleClickDeleteOpen = () => {
+    setOpenDelete(!openDelete);
+  };
+
+  const getRoomAll = async () => {
+    const res = await getRoom();
+    if (res.statusCode === "200") {
+    }
+    setAllRoom(res.data.filter(item => item.id !== "xoa01"))
+    console.log("rooom ne", allRoom);
+
+  }
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const res = await getRoom();
+  //     if (res.statusCode === "200") {
+  //     }
+  //     setAllRoom(res.data.filter(item => item.id !== "xoa01"))
+  //     console.log("rooom ne", allRoom);
+  
+
+  //   };
+  //   fetchData();
+  //   getRoomAll()
+  // }, []);
+  
+
+  const handleChangeTab =(event, newValue) => {
     settValue(newValue);
     console.log("vallll", tvalue);
-  };
+
+   getRoomAll()
+
+  }
+  
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    const res = await deleteRoom(tmpId);
+    getRoomAll()
+    console.log("new room ", res);
+    handleClickDeleteOpen()
+
+  }
+
+  const handleEdit = async (e) => {
+    const res = await updateRoom(tmpId, tmpName);
+    console.log("edit ", idRoom +   "   "+tmpName);
+    getRoomAll()
+handleClickEditOpen()
+
+  }
+
+
   const handleCreateRoom = async (e) => {
     e.preventDefault();
     const res = await createRoom(idRoom, roomName);
@@ -105,24 +174,15 @@ const Room = () => {
             >
               <Tab className="tabPick" label="Tạo phòng" />
               <Tab className="tabPick" label="Danh sách" />
-
-
-
-
             </Tabs>
             <div className="tabsSlider" style={{ left: `${tvalue * 20}%` }} />
-
             <TabPanel tvalue={tvalue} index={0}>
-
               <form
                 className="loginBox"
                 onSubmit={handleCreateRoom}
                 style={{ height: "90%", width: "100%" }}
               >
                 <h1 style={{ textAlign: "center" }}> Tạo phòng </h1>
-
-
-
                 <TextField
                   required
                   type="text"
@@ -135,8 +195,6 @@ const Room = () => {
                   }}
                   sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: '20px' }}
                 />
-
-
                 <TextField
                   required
                   type="text"
@@ -150,11 +208,8 @@ const Room = () => {
                   onChange={(e) => {
                     setRoomName(e.target.value);
                   }}
-
                   sx={{ width: "80%", marginLeft: "auto", marginRight: "auto", marginTop: "20px", marginTop: '20px' }}
                 />
-
-
                 <button
                   className="loginButton"
                   type="submit"
@@ -162,52 +217,100 @@ const Room = () => {
                 >
                   Tạo task
                 </button>
-
               </form>
             </TabPanel>
             <TabPanel tvalue={tvalue} index={1}>
+              {
+                allRoom.map((room) => (
+                  <>
 
-              <>
+                    <div className="showRoom">
+                      <span>{room.tenphong}</span>
 
+                      <div className="btnne">
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            setTmpId(room.id)
+                            setTmpName(room.tenphong)
+                            handleClickEditOpen()
+                          }
+                          }
+                        >
+                          sửa
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={{ backgroundColor: "red" }}
 
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    // handleDoneJob(jobPick)
-                  }
-
-                  }
-                >
-                  sửa
-                </Button>
-
-                <Button
-                  variant="contained"
-                  sx={{ backgroundColor: "red" }}
-
-                  onClick={() => {
-                    // handleDoneJob(jobPick)
-                  }
-
-                  }
-                >
-                  xóa
-                </Button>
-              </>
-
-
-
+                          onClick={() => {
+                            setTmpId(room.id)
+                            setTmpName(room.tenphong)
+                            handleClickDeleteOpen()
+                          }
+                          }
+                        >
+                          xóa
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                )
+                )}
             </TabPanel>
-
-
           </Box>
-
         </div>
+        <Dialog open={openDelete} onClose={handleClickDeleteOpen}>
+          <DialogTitle>Xác nhận</DialogTitle>
+          <DialogContent>
+           <span>Bạn muốn xóa phòng  {tmpId} ???</span>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClickDeleteOpen}>hủy</Button>
+            <Button onClick={handleDelete}>Xác nhận</Button>
+          </DialogActions>
+        </Dialog>
+
+
+        <Dialog open={openEdit} onClose={handleClickEditOpen}>
+          <DialogTitle>Chỉnh sửa phòng</DialogTitle>
+          <DialogContent>
+
+          <TextField
+          sx={{
+            marginTop:"15px"
+          }}
+          size="small"
+          disabled
+          id="outlined-disabled"
+          label="ID Phòng"
+          value={tmpId}
+        />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Tên phòng"
+              fullWidth
+              variant="standard"
+              value={tmpName}
+              onChange={(e) => {
+                setTmpName(e.target.value);
+              }}
+            />
+   
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClickEditOpen}>hủy</Button>
+            <Button onClick={handleEdit}>Xác nhận</Button>
+          </DialogActions>
+        </Dialog>
+
 
       </div >
 
     </>
-  );
+  )
 
 };
 
