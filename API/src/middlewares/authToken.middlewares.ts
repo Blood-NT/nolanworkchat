@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
-import logging from "../config/logging";
 dotenv.config();
 const authUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
