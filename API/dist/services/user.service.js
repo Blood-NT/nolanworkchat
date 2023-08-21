@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setRoleService = exports.changepassService = exports.lockUserService = exports.changePasswordUserService = exports.verifyUserService = exports.updateUserService = exports.loginByTokenService = exports.loginService = exports.getUserWithRoleService = exports.getAllUserService = exports.getUserService = exports.createUserService = void 0;
+exports.setRoomService = exports.setRoleService = exports.changepassService = exports.lockUserService = exports.changePasswordUserService = exports.verifyUserService = exports.updateUserService = exports.loginByTokenService = exports.loginService = exports.getUserWithRoleService = exports.getAllUserService = exports.getUserService = exports.createUserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const sequelize_1 = require("sequelize");
@@ -59,7 +59,7 @@ const getUserService = async (id, email) => {
             lock: false,
             verify: true,
         },
-        attributes: ["id", "firstName", "lastName", "email", "describe", "avatar"],
+        attributes: ["id", "firstName", "lastName", "email", "describe", "avatar", "idphongban"],
     });
     return {
         statusCode: "200",
@@ -73,7 +73,7 @@ const getAllUserService = async () => {
         where: {
             verify: true,
         },
-        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock", "role"],
+        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock", "role", "idphongban"],
         order: [["id", "ASC"]],
     });
     await (0, modern_async_1.map)(foundUser, (data, index) => {
@@ -96,7 +96,7 @@ const getUserWithRoleService = async (role) => {
             role: role,
             verify: true,
         },
-        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock", "role"],
+        attributes: ["id", "firstName", "lastName", "email", "avatar", "lock", "role", "idphongban"],
         order: [["id", "ASC"]],
     });
     await (0, modern_async_1.map)(foundUser, (data, index) => {
@@ -277,4 +277,14 @@ const setRoleService = async (uid, role) => {
     };
 };
 exports.setRoleService = setRoleService;
+const setRoomService = async (uid, idphongban) => {
+    await user_model_1.userModel.update({
+        idphongban: idphongban,
+    }, { where: { id: uid } });
+    return {
+        statusCode: "200",
+        message: "cập nhật thành công ",
+    };
+};
+exports.setRoomService = setRoomService;
 //# sourceMappingURL=user.service.js.map

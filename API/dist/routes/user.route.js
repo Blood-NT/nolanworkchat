@@ -23,6 +23,7 @@ router.post("/login-token", user_controller_1.default.loginByToken);
 router.put("/update-user", authToken_middlewares_1.authUser, user_controller_1.default.updateUser);
 router.post("/lock-user", authToken_middlewares_1.authUser, user_controller_1.default.lockUser);
 router.post("/set-role", authToken_middlewares_1.authUser, user_controller_1.default.setRole);
+router.post("/set-room", user_controller_1.default.setRoom);
 router.post("/send-email", user_controller_1.default.sendMail);
 exports.default = router;
 //# sourceMappingURL=user.route.js.map

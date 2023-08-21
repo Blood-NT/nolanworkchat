@@ -170,6 +170,7 @@ const setRole = async ( uid, role) => {
       const headers = {
         headers: { access_token: localStorage.getItem("accessToken") },
       };
+      console.log("tokennnn", localStorage.getItem("accessToken"));
       const res = await axios.post(`${apiURL}/user/set-role`, body, headers);
       console.log(res,"hehe")
       return res.data;

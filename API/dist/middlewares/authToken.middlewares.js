@@ -21,9 +21,14 @@ const authUser = async (req, res, next) => {
                 .json({ statusCode: "411", message: "không thể xác thực" });
             return;
         }
-        let key = process.env.JWT_SECRET || "";
+        let key = process.env.JWT_SECRET || "ptithcm";
         const decoded = jsonwebtoken_1.default.verify(accessToken, key);
         if ((decoded === null || decoded === void 0 ? void 0 : decoded.rule) === "admin") {
+            next();
+            return;
+        }
+        console.log(decoded);
+        if ((decoded === null || decoded === void 0 ? void 0 : decoded.rule) === "project") {
             next();
             return;
         }

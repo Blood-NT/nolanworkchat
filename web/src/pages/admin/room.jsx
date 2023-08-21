@@ -22,7 +22,6 @@ import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { createRoom, deleteRoom, getRoom, updateRoom } from "../../api/APIRoom";
 
-
 import "./admin.css";
 
 
@@ -56,6 +55,7 @@ TabPanel.propTypes = {
 
 const Room = () => {
 
+  const { setNotifi } = useContext(NotifiContext);
 
   const [tvalue, settValue] = useState(0);
   const [idRoom, setIdRoom] = useState("");
@@ -88,19 +88,19 @@ const Room = () => {
 
   }
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const res = await getRoom();
-  //     if (res.statusCode === "200") {
-  //     }
-  //     setAllRoom(res.data.filter(item => item.id !== "xoa01"))
-  //     console.log("rooom ne", allRoom);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getRoom();
+      if (res.statusCode === "200") {
+      }
+      setAllRoom(res.data.filter(item => item.id !== "xoa01"))
+      console.log("rooom ne", allRoom);
   
 
-  //   };
-  //   fetchData();
-  //   getRoomAll()
-  // }, []);
+    };
+    fetchData();
+    getRoomAll()
+  }, []);
   
 
   const handleChangeTab =(event, newValue) => {
@@ -114,9 +114,15 @@ const Room = () => {
   const handleDelete = async (e) => {
     e.preventDefault();
     const res = await deleteRoom(tmpId);
+    if(res.statusCode!=200)
+    {
+      setNotifi([res.message]);
+
+    }
     getRoomAll()
-    console.log("new room ", res);
+    setNotifi(["Xóa phòng thành công", "success"]);
     handleClickDeleteOpen()
+    
 
   }
 

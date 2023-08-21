@@ -70,7 +70,10 @@ const Project = () => {
     const res = await getAllUser();
 
     if (res.statusCode === "200") {
-      setRows(res.data.filter(item => item.role !== 'admin' && item.role !== 'project'));
+      setRows(res.data.filter(item => item.role !== 'admin' && item.role !== 'project' && item?.idphongban == user?.idphongban ));   
+    
+
+      // && item.idphongban ==user.idphongban
     }
   };
   useEffect(() => {
@@ -104,11 +107,8 @@ const Project = () => {
       return;
     }
     await fetchData();
-    // if (lock === true) {
-    //   setNotifi(["Khóa tài khoản thành công", "success"]);
-    //   return;
-    // }
-    // setNotifi(["Mở khóa tài khoản thành công", "success"]);
+  
+    setNotifi(["thay đổi cấp bậc thành công", "success"]);
   };
 
 

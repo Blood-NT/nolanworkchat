@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
+import logging from "../config/logging";
 dotenv.config();
 const authUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -16,9 +17,15 @@ const authUser = async (req: Request, res: Response, next: NextFunction) => {
         .json({ statusCode: "411", message: "không thể xác thực" });
       return;
     }
-    let key = process.env.JWT_SECRET || "";
+    let key = process.env.JWT_SECRET || "ptithcm";
     const decoded: any = jwt.verify(accessToken, key);
+    logging.debug("hehe","hihi",decoded)
+
     if (decoded?.rule === "admin") {
+      next();
+      return;
+    }
+    if (decoded?.rule === "project") {
       next();
       return;
     }

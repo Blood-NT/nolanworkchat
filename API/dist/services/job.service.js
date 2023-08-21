@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getJobByTimeService = exports.getJobByUserService = exports.createJobService = void 0;
+exports.donejobService = exports.getJobByTimeService = exports.getJobByUserService = exports.createJobService = void 0;
 const sequelize_1 = require("sequelize");
 const job_model_1 = require("../models/job.model");
 const createJobService = async (newJob) => {
@@ -49,4 +49,17 @@ const getJobByUserService = async (adminid, leaderid) => {
     };
 };
 exports.getJobByUserService = getJobByUserService;
+const donejobService = async (id, isdonetmp) => {
+    await job_model_1.jobModel.update({
+        jobdone: isdonetmp,
+        updateat: new Date(),
+    }, {
+        where: { id: id },
+    });
+    return {
+        statusCode: "200",
+        message: "cập nhật thành công",
+    };
+};
+exports.donejobService = donejobService;
 //# sourceMappingURL=job.service.js.map

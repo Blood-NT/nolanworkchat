@@ -11,6 +11,7 @@ const job_route_1 = __importDefault(require("./job.route"));
 const taskmessage_route_1 = __importDefault(require("./taskmessage.route"));
 const taskreport_route_1 = __importDefault(require("./taskreport.route"));
 const task_route_1 = __importDefault(require("./task.route"));
+const room_route_1 = __importDefault(require("./room.route"));
 const route = (app) => {
     app.use("/user", user_route_1.default);
     app.use("/group", group_route_1.default);
@@ -20,6 +21,7 @@ const route = (app) => {
     app.use("/task", task_route_1.default);
     app.use("/task-message", taskmessage_route_1.default);
     app.use("/task-report", taskreport_route_1.default);
+    app.use("/room", room_route_1.default);
 };
 exports.default = route;
 //# sourceMappingURL=index.js.map

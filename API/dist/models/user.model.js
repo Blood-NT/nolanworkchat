@@ -19,6 +19,7 @@ exports.userModel = connectDB_1.default.define("users", {
     role: sequelize_1.DataTypes.STRING(50),
     verify: sequelize_1.DataTypes.BOOLEAN,
     refreshToken: sequelize_1.DataTypes.STRING(500),
+    idphongban: sequelize_1.DataTypes.STRING(20),
 }, {
     timestamps: false,
     tableName: "users",

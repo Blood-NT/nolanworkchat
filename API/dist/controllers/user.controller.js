@@ -247,6 +247,16 @@ const verified = (_req, res) => {
         console.log(error);
     }
 };
+const setRoom = async (req, res) => {
+    try {
+        const { uid, idphongban } = req.body;
+        const response = await (0, user_service_1.setRoomService)(uid, idphongban);
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
 exports.default = {
     createUser,
     login,
@@ -264,6 +274,7 @@ exports.default = {
     createForgotPassword,
     verifyChangePassword,
     lockUser,
-    setRole
+    setRole,
+    setRoom
 };
 //# sourceMappingURL=user.controller.js.map

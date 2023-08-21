@@ -9,5 +9,6 @@ const router = express_1.default.Router();
 router.get("/get-job/:sender/:receive", job_controller_1.default.getJobByUser);
 router.get("/get-jobs/:userId", job_controller_1.default.getJobByTime);
 router.post("/create-job", job_controller_1.default.createJob);
+router.put("/jobDone", job_controller_1.default.doneJob);
 exports.default = router;
 //# sourceMappingURL=job.route.js.map

@@ -32,9 +32,20 @@ const getJobByUser = async (req, res) => {
         res.status(200).json({ statusCode: "400", message: `${error}` });
     }
 };
+const doneJob = async (req, res) => {
+    try {
+        const { id, donetmp } = req.body;
+        const response = await (0, job_service_1.donejobService)(id, donetmp);
+        res.status(200).json(response);
+    }
+    catch (error) {
+        res.status(200).json({ statusCode: "400", message: `${error}` });
+    }
+};
 exports.default = {
     createJob,
     getJobByUser,
     getJobByTime,
+    doneJob
 };
 //# sourceMappingURL=job.controller.js.map

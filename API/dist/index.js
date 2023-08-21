@@ -52,6 +52,7 @@ io.on("connection", (socket) => {
             io.emit("getUsers", exports.users);
         }
     });
+    socket;
     socket.on("sendMessage", ({ senderId, receiverId, text, type }) => {
         const user = getUser(receiverId);
         io.to(user === null || user === void 0 ? void 0 : user.socketId).emit("getMessage", {
@@ -59,6 +60,10 @@ io.on("connection", (socket) => {
             text,
             type,
         });
+    });
+    socket.on("sendReport", ({ receiverId }) => {
+        const user = getUser(receiverId);
+        io.to(user === null || user === void 0 ? void 0 : user.socketId).emit("getreport", {});
     });
     socket.on("deleteMessage", ({ receiverId }) => {
         const user = getUser(receiverId);

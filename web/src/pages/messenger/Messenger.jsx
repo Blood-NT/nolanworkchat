@@ -37,6 +37,7 @@ const Messenger = () => {
   const inputFile = useRef(null);
   useEffect(() => {
     socket.on("getMessage", (data) => {
+      console.log(data);
       setArrivalMessage({
         sender: data.senderId,
         messages: data.text,
@@ -50,9 +51,23 @@ const Messenger = () => {
   }, []);
 //kiểm tra xem tin nhắn có trong đoạn chat hiện tại hay kgoong. nếu có thì thêm vào
   useEffect(() => {
+    if(!currentChat){
+      const findCurrChat = conversations.find(conver=> conver.receive === arrivalMessage.sender || conver.sender === arrivalMessage.sender)
+      const fetchUser = async () => {
+        let oppositeId = findCurrChat.sender === user.id ? findCurrChat.receive : findCurrChat.sender;
+        const res = await getUserByUsername(oppositeId);
+        if (res.statusCode === "200") {
+          setOppositeUser(res.data);
+        }
+      };
+      fetchUser();
+      setCurrentChat(findCurrChat)
+      // setMessages((messages) => [...messages, arrivalMessage]);
+      return
+    }
     arrivalMessage &&
       (arrivalMessage.sender === currentChat?.sender ||
-        arrivalMessage.sender === currentChat.receive) &&
+        arrivalMessage.sender === currentChat?.receive) &&
       setMessages((messages) => [...messages, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 

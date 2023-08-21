@@ -37,12 +37,11 @@ router.post("/lock-user", authUser, userController.lockUser);
 
 
 
-router.post("/set-role", authUser, userController.setRole);
+router.post("/set-role",authUser, userController.setRole);
 // router.post("/set-role", authUser, userController.setRole);
 router.post("/set-room", userController.setRoom);
 // router.post("/lock-user", authUser, userController.lockUser);
 
 
 router.post("/send-email", userController.sendMail);
-
 export default router;

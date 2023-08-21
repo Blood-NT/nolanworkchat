@@ -113,6 +113,8 @@ const UserMagager = () => {
       return;
     }
     await fetchData();
+    setNotifi(["thay đổi cấp bậc thành công", "success"]);
+
   };
 
 
@@ -317,7 +319,7 @@ const UserMagager = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[10, 20, 30]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

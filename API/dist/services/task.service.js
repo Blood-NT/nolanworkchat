@@ -127,12 +127,12 @@ const checkTaskServices = async (idTask, memid, check) => {
     };
 };
 exports.checkTaskServices = checkTaskServices;
-const updateIsDoneTaskService = async (id, isdonetmp) => {
+const updateIsDoneTaskService = async (taskid, isdonetmp) => {
     await task_model_1.taskModel.update({
         isdone: isdonetmp,
         updatedAt: new Date(),
     }, {
-        where: { id: id },
+        where: { id: taskid },
     });
     return {
         statusCode: "200",

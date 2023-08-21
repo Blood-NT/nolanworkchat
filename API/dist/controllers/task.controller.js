@@ -78,9 +78,10 @@ const getTaskByLeader = async (req, res) => {
 };
 const doneTask = async (req, res) => {
     try {
-        const { id, donetmp } = req.body;
-        const response = await (0, task_service_1.updateIsDoneTaskService)(id, donetmp);
+        const { taskid, donetmp } = req.body;
+        const response = await (0, task_service_1.updateIsDoneTaskService)(taskid, donetmp);
         res.status(200).json(response);
+        logging_1.default.debug("okkk", taskid + "    " + donetmp);
     }
     catch (error) {
         res.status(200).json({ statusCode: "400", message: `${error}` });
