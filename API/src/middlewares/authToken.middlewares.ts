@@ -19,8 +19,6 @@ const authUser = async (req: Request, res: Response, next: NextFunction) => {
     }
     let key = process.env.JWT_SECRET || "ptithcm";
     const decoded: any = jwt.verify(accessToken, key);
-    logging.debug("hehe","hihi",decoded)
-
     if (decoded?.rule === "admin") {
       next();
       return;
