@@ -51,7 +51,7 @@ const getBlockUserByBlockerService = async (
   blocker: string
 ): Promise<response> => {
   const data: any = await sequelize.query(
-    `SELECT DISTINCT b.id,b.blocker,b.blocked,u.avatar FROM block as b,users as u where b.blocker = "${blocker}" and b.blocked = u.id`
+    `SELECT DISTINCT b.id,b.blocker,b.blocked,u.avatar FROM blockuser as b,users as u where b.blocker = "${blocker}" and b.blocked = u.id`
   );
   return {
     statusCode: "200",
